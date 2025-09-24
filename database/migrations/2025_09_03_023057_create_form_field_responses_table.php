@@ -23,6 +23,7 @@ return new class extends Migration
          $table->index(['form_response_id']);
          $table->index(['form_template_field_id']);
 
+         // $table->unique(['form_response_id', 'form_template_field_id']);
       });
    }
 
