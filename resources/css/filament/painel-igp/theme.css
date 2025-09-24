@@ -1,0 +1,29 @@
+@import '../../../../vendor/filament/filament/resources/css/theme.css';
+
+@source '../../../../app/Filament/**/*';
+@source '../../../../resources/views/filament/**/*';
+
+
+
+.fi-fo-rich-editor-tool svg {
+   height: 1rem !important;
+   width: 1rem !important;
+}
+
+
+.form-content-description  {
+    list-style-type: disc !important;
+    margin-left: 1.5rem !important;
+    padding-left: 1.5rem !important;
+    background-color: red !important;
+
+}
+
+.form-content-description ul li p {
+    margin: 0 !important; /* remove espaço extra do <p> */
+}
+
+
+.form-content-description ul li {
+    list-style: disc !important;
+}
