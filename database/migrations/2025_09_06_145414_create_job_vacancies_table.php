@@ -30,7 +30,7 @@ return new class extends Migration
             'freelancer',
             'trainee',
             'cooperated',
-         ])->default('full_time');
+         ])->default('clt');
 
          $table->enum('work_location', [
             'on_site',
