@@ -14,6 +14,7 @@
         "livewire/flux": "^2.1.1",
         "livewire/livewire": "^3.6",
         "livewire/volt": "^1.7",
+        "openspout/openspout": "4.28.5",
         "robsontenorio/mary": "^2.4",
         "secondnetwork/blade-tabler-icons": "^3.34"
     },
