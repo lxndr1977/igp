@@ -16,7 +16,7 @@
                Inovação em Gestão de Pessoas
             </h1>
             <p class="text-xl md:text-2xl mb-8 text-blue-100">
-               Inovamos, instruímos e inspiramos organizações, ajudando-as a encontrar os melhores talentos para suas
+               Nós Inovamos, instruímos e inspiramos organizações, ajudando-as a encontrar os melhores talentos para suas
                necessidades de negócios
             </p>
             <x-mary-button label="Fale conosco" link="#contato" class="btn btn-primary btn-lg" />

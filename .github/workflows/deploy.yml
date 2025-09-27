@@ -1,0 +1,76 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to Production Server
+    
+    steps:
+    - name: 🚀 Deploy to server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.PRIVATE_KEY }}
+        port: ${{ secrets.PORT }}
+        command_timeout: 30m
+        script: |
+          echo "🎯 Starting deployment to inroche.com.br..."
+          
+          # Navigate to project directory
+          cd /var/www/inroche.com.br
+          
+          # Check if deploy script exists
+          if [ ! -f "./deploy.sh" ]; then
+            echo "❌ Deploy script not found!"
+            exit 1
+          fi
+          
+          # Make sure deploy script is executable
+          chmod +x ./deploy.sh
+          
+          # Show current commit before deployment
+          echo "📍 Current commit: $(git rev-parse --short HEAD)"
+          
+          # Run deployment script
+          echo "⚡ Running deployment script..."
+          ./deploy.sh
+          
+          # Check deployment result
+          DEPLOY_EXIT_CODE=$?
+          
+          if [ $DEPLOY_EXIT_CODE -eq 0 ]; then
+            echo "✅ Deployment completed successfully!"
+            echo "🆕 New commit: $(git rev-parse --short HEAD)"
+            echo "🕐 Deployed at: $(date)"
+            
+            # Optional: Check if site is responding
+            echo "🌐 Checking site status..."
+            if curl -sSf https://inroche.com.br > /dev/null; then
+              echo "✅ Site is responding correctly!"
+            else
+              echo "⚠️ Site might have issues, please check manually"
+            fi
+          else
+            echo "❌ Deployment failed with exit code: $DEPLOY_EXIT_CODE"
+            exit 1
+          fi
+
+    - name: 📱 Notify deployment result
+      if: always()
+      run: |
+        if [ "${{ job.status }}" == "success" ]; then
+          echo "✅ Deployment SUCCESS!"
+          echo "📦 Commit: ${{ github.sha }}"
+          echo "👤 Author: ${{ github.actor }}"
+          echo "💬 Message: ${{ github.event.head_commit.message }}"
+        else
+          echo "❌ Deployment FAILED!"
+          echo "📦 Failed commit: ${{ github.sha }}"
+          echo "👤 Author: ${{ github.actor }}"
+        fi
