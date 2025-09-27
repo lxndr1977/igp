@@ -170,12 +170,15 @@
 
            <!-- Botão Menu Mobile -->
            <div class="md:hidden">
-              <button @click="mobileMenuOpen = !mobileMenuOpen"
-                 class="color-secondary-content hover:bg-white hover:bg-opacity-20 focus:outline-none p-2 rounded-lg transition-colors duration-200"
-                 :class="{ 'bg-white bg-opacity-20': mobileMenuOpen }"
+              <button
+                 @click="mobileMenuOpen = !mobileMenuOpen"
+                 class="color-secondary-content hover:bg-primary-600 hover:bg-opacity-20 focus:outline-none p-2 rounded-lg transition-colors duration-200"
+                 :class="{ 'bg-primary-600 bg-opacity-20': mobileMenuOpen }"
                  :aria-expanded="mobileMenuOpen">
-                 <svg class="h-6 w-6 transform transition-transform duration-200"
-                    :class="{ 'rotate-90': mobileMenuOpen }" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                 <svg
+                    class="h-6 w-6 transform transition-transform duration-200"
+                    :class="{ 'text-secondary-600': mobileMenuOpen, 'text-white': !mobileMenuOpen, 'rotate-90': mobileMenuOpen }"
+                    stroke="currentColor" fill="none" viewBox="0 0 24 24">
                     <path x-show="!mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                        d="M4 6h16M4 12h16M4 18h16" />
                     <path x-show="mobileMenuOpen" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -194,7 +197,7 @@
         x-transition:leave="transition ease-in duration-150"
         x-transition:leave-start="opacity-100 transform translate-y-0"
         x-transition:leave-end="opacity-0 transform -translate-y-2"
-        class="md:hidden color-secondary border-t border-white border-opacity-20">
+        class="md:hidden bg-zinc-50 text-secondary-600">
         <div class="px-4 pt-4 pb-6 space-y-2">
            <template x-for="item in menuItems" :key="item.name">
               <div>
@@ -203,7 +206,7 @@
                     <a :href="item.hasSubmenu ? '#' : item.href"
                        @click="item.hasSubmenu ? (openSubmenu = openSubmenu === item.name ? null : item.name) : navigateTo(item.href)"
                        class="flex-1 block px-4 py-3 color-secondary-content hover:bg-white hover:bg-opacity-20 rounded-xl text-base font-medium transition-all duration-200"
-                       :class="{ 'bg-white bg-opacity-10': item.active || openSubmenu === item.name }">
+                       :class="{ 'bg-primary-600 text-secondary-600 bg-opacity-10': item.active || openSubmenu === item.name }">
                        <div class="flex items-center justify-between">
                           <span x-text="item.name"></span>
                           <!-- Ícone seta para submenu mobile -->
@@ -239,10 +242,10 @@
            </template>
 
            <!-- Botão Contato Mobile -->
-           <div class="pt-4 mt-4 border-t border-white border-opacity-20">
+           <div class="pt-4 mt-4">
               <a :href="contactButton.href"
                  @click="navigateTo(contactButton.href)"
-                 class="block w-full bg-white color-secondary px-4 py-3 rounded-xl text-base font-semibold text-center hover:bg-opacity-90 transition-all duration-200"
+                 class="block w-full bg-primary-600 text-secondary-600 py-3 rounded-xl text-base font-semibold text-center hover:bg-opacity-90 transition-all duration-200"
                  x-text="contactButton.text">
               </a>
            </div>
