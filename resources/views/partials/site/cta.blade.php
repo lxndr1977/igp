@@ -1,7 +1,7 @@
  <section class="py-20 md:py-24 lg:py-32">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8  ">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
        <div class="px-8 py-16 rounded-lg bg-primary-600">
-          <div class="text-center max-w-4xl mx-auto">
+          <div class="text-center md:max-w-4xl mx-auto">
              <h2 class="text-3xl md:text-4xl font-bold mb-6 text-secondary-600">
                 Pronto para transformar sua organização?
              </h2>

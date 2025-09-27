@@ -31,7 +31,7 @@
              <img src="{{ asset('images/rochelle-machado.webp') }}"
                 alt="Foto Rochelle Machado"
                 loading="lazy"
-                class="rounded-lg max-w-md w-auto mx-auto">
+                class="rounded-lg max-w-md w-full mx-auto">
           </div>
        </div>
     </div>
