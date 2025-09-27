@@ -67,7 +67,7 @@
                <li class="text-sm space-y-1">
                   <p>Avenida Júlio de Castilhos, 1481 - Sala 13</p>
                   <p>Nossa Sra. de Lourdes</p>
-                  <p>Caxias do Sul, RS, 95.010-003</p>
+                  <p>Caxias do Sul, RS, 95.020-576</p>
                   <a href="https://www.google.com/maps?q=Avenida+J%C3%BAlio+de+Castilhos,+1481+-+Caxias+do+Sul+-+RS"
                      target="_blank"
                      class="flex flex-row items-center gap-2 text-sm mt-2 ">
@@ -86,7 +86,7 @@
    </div>
 
    <div class="max-w-7xl flex flex-row mx-auto px-4 sm:px-6 lg:px-8 py-6 justify-between text-sm border-t-1 border-white/20">
-      <p>&copy; {{ date('Y') }} - InRoche Inovação em Gestão de Pessoas. Todos os direitos reservados.</p>
+      <p>&copy; {{ date('Y') }} - InRoche Inovação em Gestão de Pessoas. CNPJ 25.025.357/0001-55. Todos os direitos reservados.</p>
 
       <a href="{{ route('site.privacy-policy') }}">Política de Privacidade</a>
    </div>

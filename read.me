@@ -1,0 +1,24 @@
+sudo dnf update --allowerasing -y
+sudo dnf install epel-release -y
+sudo dnf install wget curl git unzip -y
+
+
+sudo dnf install dnf-utils -y
+sudo dnf install https://rpms.remirepo.net/enterprise/remi-release-9.rpm -y
+
+
+sudo dnf module reset php -y
+sudo dnf module enable php:remi-8.3 -y
+sudo dnf install php php-cli php-fpm php-mbstring php-xml php-bcmath php-curl php-mysqlnd php-zip php-intl php-gd unzip -y
+
+
+sudo dnf install mariadb-server mariadb -y
+sudo systemctl enable mariadb
+sudo systemctl start mariadb
+sudo mysql_secure_installation
+
+
+
+sudo dnf install nginx -y
+sudo systemctl enable nginx
+sudo systemctl start nginx
