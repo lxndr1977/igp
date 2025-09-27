@@ -83,21 +83,25 @@ class AllFormResponses extends Page implements HasTable
          ->query(function () {
             $query = FormResponse::query()->with('subject.company');
 
-            if ($this->formId) {
-               $query->where(function ($q) {
-                  // Respostas de CompanyForm
-                  $q->where(function ($q2) {
-                     $q2->where('subject_type', \App\Models\CompanyForm::class)
-                        ->where('subject_id', $this->formId);
-                  })
-                     // Respostas de JobVacancy relacionadas a esse form template
-                     ->orWhereHasMorph(
-                        'subject',
-                        [\App\Models\JobVacancy::class],
-                        fn($q2) => $q2->where('form_template_id', $this->formId)
-                     );
-               });
-            }
+          if ($this->formId) {
+    $form = CompanyForm::find($this->formId);
+    $companyId = $form?->company_id;
+
+    $query->where(function ($q) use ($companyId) {
+        $q->where(function ($q2) {
+            $q2->where('subject_type', \App\Models\CompanyForm::class)
+               ->where('subject_id', $this->formId);
+        })
+        ->orWhereHasMorph(
+            'subject',
+            [\App\Models\JobVacancy::class],
+            fn($q2) => $q2
+                ->where('form_template_id', $this->formId)
+                ->where('company_id', $companyId)
+        );
+    });
+}
+
 
             return $query;
          })
