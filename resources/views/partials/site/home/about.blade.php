@@ -11,7 +11,7 @@
 
 
        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-          <div>
+          <div class="order-2 md:order-1">
              <h2 class="text-2xl md:text-3xl font-medium tracking-tight mb-2 text-neutral-900">Rochele Machado</h2>
              <p class="mb-6 text-neutral-500">Diretora e Fundadora</p>
 
@@ -27,7 +27,7 @@
                 label="Fale conosco" />
           </div>
 
-          <div>
+          <div class="order-1 md:order-2">
              <img src="{{ asset('images/rochelle-machado.webp') }}"
                 alt="Foto Rochelle Machado"
                 loading="lazy"
