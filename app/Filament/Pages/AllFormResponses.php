@@ -46,7 +46,7 @@ class AllFormResponses extends Page implements HasTable
     $hasJobResponses = false;
     $createdAt = null;
 
-    if ($this->formId) {
+    if ($this->formId) { 
         $formTemplate = CompanyForm::with(['company', 'formTemplate'])
             ->find($this->formId);
 
@@ -63,7 +63,7 @@ class AllFormResponses extends Page implements HasTable
         $hasJobResponses = FormResponse::whereHasMorph(
             'subject',
             [\App\Models\JobVacancy::class],
-            fn($q) => $q->where('company_form_template_id', $this->formId)
+            fn($q) => $q->where('form_template_id', $this->formId)
         )->exists();
     }
 
@@ -94,7 +94,7 @@ class AllFormResponses extends Page implements HasTable
                      ->orWhereHasMorph(
                         'subject',
                         [\App\Models\JobVacancy::class],
-                        fn($q2) => $q2->where('company_form_template_id', $this->formId)
+                        fn($q2) => $q2->where('form_template_id', $this->formId)
                      );
                });
             }
