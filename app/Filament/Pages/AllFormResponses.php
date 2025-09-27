@@ -17,8 +17,8 @@ class AllFormResponses extends Page implements HasTable
 {
    use InteractsWithTable;
 
-    protected static bool $isDiscovered = false;
-    protected static bool $shouldRegisterNavigation = true;
+   protected static bool $isDiscovered = false;
+   protected static bool $shouldRegisterNavigation = true;
 
 
    protected string $view = 'filament.pages.all-form-responses';
@@ -27,7 +27,7 @@ class AllFormResponses extends Page implements HasTable
 
    protected static ?string $navigationLabel = 'Visualizar Respostas';
 
-   protected ?string $subheading = 'Custom Page Subheading'; 
+   protected ?string $subheading = 'Custom Page Subheading';
 
    // Parâmetro opcional
    public ?int $formId = null;
@@ -39,43 +39,43 @@ class AllFormResponses extends Page implements HasTable
    }
 
    public function getHeader(): ?View
-{
-    $companyName = null;
-    $formTemplateName = null;
-    $hasGeneralResponses = false;
-    $hasJobResponses = false;
-    $createdAt = null;
+   {
+      $companyName = null;
+      $formTemplateName = null;
+      $hasGeneralResponses = false;
+      $hasJobResponses = false;
+      $createdAt = null;
 
-    if ($this->formId) { 
-        $formTemplate = CompanyForm::with(['company', 'formTemplate'])
+      if ($this->formId) {
+         $formTemplate = CompanyForm::with(['company', 'formTemplate'])
             ->find($this->formId);
 
-        $companyName = $formTemplate?->company?->name;
-        $formTemplateName = $formTemplate?->formTemplate?->name;
-        $createdAt = $formTemplate?->created_at;
-        
-        // Verifica se tem respostas diretas do formulário (formulário geral)
-        $hasGeneralResponses = FormResponse::where('subject_type', \App\Models\CompanyForm::class)
+         $companyName = $formTemplate?->company?->name;
+         $formTemplateName = $formTemplate?->formTemplate?->name;
+         $createdAt = $formTemplate?->created_at;
+
+         // Verifica se tem respostas diretas do formulário (formulário geral)
+         $hasGeneralResponses = FormResponse::where('subject_type', \App\Models\CompanyForm::class)
             ->where('subject_id', $this->formId)
             ->exists();
-            
-        // Verifica se tem respostas através de vagas (formulário de vaga)
-        $hasJobResponses = FormResponse::whereHasMorph(
+
+         // Verifica se tem respostas através de vagas (formulário de vaga)
+         $hasJobResponses = FormResponse::whereHasMorph(
             'subject',
             [\App\Models\JobVacancy::class],
             fn($q) => $q->where('form_template_id', $this->formId)
-        )->exists();
-    }
+         )->exists();
+      }
 
-    return view('filament.header-form-responses', [
-        'companyName' => $companyName,
-        'formTemplateName' => $formTemplateName,
-        'createdAt' => $createdAt,
-        'formId' => $this->formId,
-        'hasGeneralResponses' => $hasGeneralResponses,
-        'hasJobResponses' => $hasJobResponses,
-    ]);
-}
+      return view('filament.header-form-responses', [
+         'companyName' => $companyName,
+         'formTemplateName' => $formTemplateName,
+         'createdAt' => $createdAt,
+         'formId' => $this->formId,
+         'hasGeneralResponses' => $hasGeneralResponses,
+         'hasJobResponses' => $hasJobResponses,
+      ]);
+   }
 
    public function table(Table $table): Table
    {
@@ -85,12 +85,12 @@ class AllFormResponses extends Page implements HasTable
 
             if ($this->formId) {
                $query->where(function ($q) {
-                  // Pega respostas de CompanyForm
+                  // Respostas de CompanyForm
                   $q->where(function ($q2) {
                      $q2->where('subject_type', \App\Models\CompanyForm::class)
                         ->where('subject_id', $this->formId);
                   })
-                     // ou respostas de JobVacancy relacionadas a esse form template
+                     // Respostas de JobVacancy relacionadas a esse form template
                      ->orWhereHasMorph(
                         'subject',
                         [\App\Models\JobVacancy::class],
@@ -101,6 +101,7 @@ class AllFormResponses extends Page implements HasTable
 
             return $query;
          })
+
          ->columns([
             TextColumn::make('respondent_name')->label('Respondente')->searchable(),
             TextColumn::make('respondent_email')->label('Email')->searchable(),
