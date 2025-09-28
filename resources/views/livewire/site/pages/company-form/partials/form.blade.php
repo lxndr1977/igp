@@ -73,7 +73,7 @@
             @endforeach
          </div>
 
-         <div class="pt-8 flexflex-col md:flex-row justify-between items-center gap-y-6">
+         <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-y-6">
             @if ($currentStep > 1)
                <x-mary-button
                   wire:click="previousStep"
@@ -102,8 +102,7 @@
                   icon="tabler.send"
                   label="{{ $isJobVacancy && $jobVacancy ? 'Enviar currículo' : 'Enviar respostas' }}"
                   spinner="submit"
-                  class="btn btn-primary text-base py-6 order-1 md:order-2 w-full md:-w-auto">
-               </x-mary-button>
+                  class="btn btn-primary text-base py-6 order-1 md:order-2 w-full md:-w-auto" />
             @endif
          </div>
       @else
@@ -141,21 +140,22 @@
             @endforeach
          </div>
 
-         <div class="pt-12 flex flex-col md:flex-row justify-between items-center gap-y-6 ">
-            <x-mary-button
+         <div class="pt-12  ">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-y-6">
+               <x-mary-button
                wire:click="backToIntro"
                icon="tabler.arrow-left"
-               class="text-base py-6 w-full md:-w-auto order-2 md:order-1"
+               class="text-base py-6 w-full md:w-auto order-2 md:order-1"
                label="Voltar às Informações" />
-
-            <x-mary-button
+               
+               <x-mary-button
                wire:click="submit"
                wire:loading.attr="disabled"
                icon="tabler.send"
                label="{{ $isJobVacancy && $jobVacancy ? 'Enviar currículo' : 'Enviar respostas' }}"
                spinner="submit"
-               class="btn btn-primary w-full md:-w-auto text-base py-6 order-1 md:order-2">
-            </x-mary-button>
+               class="btn btn-primary w-full md:w-auto text-base py-6 order-1 md:order-2" />
+            </div>
          </div>
       @endif
    </form>
