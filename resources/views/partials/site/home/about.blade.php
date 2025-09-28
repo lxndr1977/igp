@@ -9,7 +9,6 @@
           </p>
        </div>
 
-
        <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
           <div class="order-2 md:order-1">
              <h2 class="text-2xl md:text-3xl font-medium tracking-tight mb-2 text-neutral-900">Rochele Machado</h2>
