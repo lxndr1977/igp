@@ -14,7 +14,7 @@ class JobVacancy extends Component
 
    public function mount()
    {
-      $this->filterJobs(); // carrega todas as vagas ativas inicialmente
+      $this->filterJobs(); 
    }
 
    public function filterJobs()
