@@ -3,7 +3,9 @@
       @php $jobInfo = $this->getJobVacancyInfo(); @endphp
 
       <div class="flex flex-col md:flex-row gap-8 mb-8">
-         <div class="md:w-2/3">
+         <div class="md:w-2/3 order-2 md:order-1">
+            {{-- Descrição da vaga --}}
+            
             @include('livewire.site.pages.company-form.partials.content-description', [
                 'type' => 'job',
                 'jobVacancy' => $jobVacancy,
@@ -18,7 +20,7 @@
             </x-mary-button>
          </div>
 
-         <div class="md:w-1/3">
+         <div class="md:w-1/3 order-1 md:order-2">
             <div class="bg-white shadow rounded-lg p-6 md:p-8 sticky top-4">
                @include('livewire.site.pages.company-form.partials.info-card', [
                    'type' => 'job',
@@ -27,11 +29,12 @@
             </div>
          </div>
       </div>
-   @else
+   @else   
       @php $formInfo = $this->getFormInfo(); @endphp
 
       <div class="flex flex-col md:flex-row gap-8 mb-8">
-         <div class="md:w-2/3">
+         <div class="md:w-2/3 order-2 md:order-1">
+            {{-- Descrição do formulário --}}
             @include('livewire.site.pages.company-form.partials.content-description', [
                 'type' => 'form',
                 'form' => $this->form ?? null,
@@ -45,7 +48,7 @@
                label="Preencher Formulário" />
          </div>
 
-         <div class="md:w-1/3">
+         <div class="md:w-1/3 order-1 md:order-2">
             <div class="space-y-4 ">
                <div class="bg-white rounded-lg p-6 md:p-8 border border-neutral-200 sticky top-12">
 

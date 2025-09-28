@@ -31,10 +31,8 @@
                $info = $isJob ? $this->getJobVacancyInfo() : $this->getFormInfo();
             @endphp
 
-
-
             <div class="max-w-7xl mx-auto flex flex-col justify-start md:flex-row gap-8">
-               <div class="w-2/3">
+               <div class="w-full md:w-2/3">
                   {{-- Header com breadcrumbs apenas para job --}}
                   @if ($isJob)
                      <x-site.page-header
@@ -65,7 +63,7 @@
                   @include('livewire.site.pages.company-form.partials.form')
                </div>
 
-               <div class="w-1/3 ">
+               <div class="w-full md:w-1/3">
                   <div class="bg-white rounded-lg shadow p-6 border border-neutral-200 sticky top-12">
                      @include('livewire.site.pages.company-form.partials.info-card', [
                          'type' => $isJob ? 'job' : 'form',
