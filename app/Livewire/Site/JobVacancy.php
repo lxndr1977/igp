@@ -11,25 +11,18 @@ class JobVacancy extends Component
 {
     use WithPagination;
 
-<<<<<<< HEAD
-   public function mount()
-   {
-      $this->filterJobs(); 
-   }
-=======
+    // Propriedades públicas
     public $search = '';
     public $city = '';
     public $state = '';
     public $statesList = [];
     public $totalCount; 
->>>>>>> feature/fix-job-vancy-info
 
     protected $updatesQueryString = ['search', 'city', 'state'];
 
     public function mount()
     {
         $this->statesList = BrazilianStateEnum::forMarySelect();
-
         $this->updateTotalCount();
     }
 
@@ -84,7 +77,7 @@ class JobVacancy extends Component
             ->when($this->state, fn($q) => $q->where('state', $this->state))
             ->orderBy('is_featured', 'desc')
             ->orderBy('application_deadline', 'asc')
-            ->simplePaginate(1);
+            ->simplePaginate(10); // Mudei de 1 para 10
 
         return view('livewire.site.job-vacancy', compact('jobVacancies'));
     }
