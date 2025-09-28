@@ -15,7 +15,7 @@
             <div class="bg-gray-200 rounded-full h-2.5">
                <div class="bg-primary h-2.5 rounded-full"
                   style="width: {{ ($currentStep / $totalSteps) * 100 }}%">
-               </div>
+               </div> 
             </div>
 
             <p class="text-center text-sm text-gray-600 mt-2">Passo {{ $currentStep }} de {{ $totalSteps }}
