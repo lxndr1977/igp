@@ -25,6 +25,7 @@ use Filament\Tables\Columns\TextColumn;
 use Illuminate\Validation\Rules\Unique;
 use App\Filament\Pages\AllFormResponses;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
@@ -72,10 +73,10 @@ class FormTemplatesRelationManager extends RelationManager
             Select::make('company_id')
                ->label('Empresa')
                ->relationship('company', 'name', modifyQueryUsing: fn($query) => $query->where('is_active', true)->orderBy('name'))
-                  ->label('Empresa')
-    ->default(fn() => $this->ownerRecord->id) // pega a empresa do record pai
-    ->disabled() // não exibe para o usuário
-    ->required(),
+               ->label('Empresa')
+               ->default(fn() => $this->ownerRecord->id) // pega a empresa do record pai
+               ->disabled() // não exibe para o usuário
+               ->required(),
 
             Select::make('form_template_id')
                ->label('Modelo de Formulário')
@@ -209,7 +210,34 @@ class FormTemplatesRelationManager extends RelationManager
 
             ActionGroup::make([
                EditAction::make(),
-               DeleteAction::make(),
+
+               DeleteAction::make()
+                  ->label('Excluir')
+                  ->icon('heroicon-o-trash')
+                  ->color('danger')
+                  ->tooltip('Remover este vínculo permanentemente')
+                  ->requiresConfirmation()
+                  ->modalHeading('Excluir Empresa')
+                  ->modalDescription('Tem certeza que deseja excluir este formulário? Esta ação não pode ser desfeita.')
+                  ->modalSubmitActionLabel('Sim, Excluir')
+                  ->modalCancelActionLabel('Cancelar')
+                  ->successNotificationTitle(null)
+                  ->action(function (CompanyForm $record): void {
+                     try {
+                        $record->delete();
+
+                        Notification::make()
+                           ->title('Formulário excluído!')
+                           ->success()
+                           ->send();
+                     } catch (\Exception $e) {
+                        Notification::make()
+                           ->title('Não foi possível excluir')
+                           ->body($e->getMessage())
+                           ->danger()
+                           ->send();
+                     }
+                  })
             ])
                ->icon('heroicon-m-ellipsis-vertical')
                ->iconSize(IconSize::Small)

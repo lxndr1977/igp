@@ -150,6 +150,15 @@ class JobVacancy extends Model
       // $query->whereHas('formTemplate', function ($subQuery) {
       //    $subQuery->where('is_vacancy_form', true);
       // });
-      
+
+   }
+
+   protected static function booted()
+   {
+      static::deleting(function ($jobVacancy) {
+         if ($jobVacancy->formResponses()->exists()) {
+            throw new \Exception('Esta vaga não pode ser excluída porque possui candidatos.');
+         }
+      });
    }
 }

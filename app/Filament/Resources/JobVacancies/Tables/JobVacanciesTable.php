@@ -16,6 +16,7 @@ use Filament\Support\Enums\Alignment;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Notifications\Notification;
 use Filament\Tables\Filters\SelectFilter;
 
 class JobVacanciesTable
@@ -81,7 +82,33 @@ class JobVacanciesTable
             ActionGroup::make([
                EditAction::make(),
 
-               DeleteAction::make(),
+               DeleteAction::make()
+                  ->label('Excluir')
+                  ->icon('heroicon-o-trash')
+                  ->color('danger')
+                  ->tooltip('Remover este vínculo permanentemente')
+                  ->requiresConfirmation()
+                  ->modalHeading('Excluir Empresa')
+                  ->modalDescription('Tem certeza que deseja excluir esta vaga? Esta ação não pode ser desfeita.')
+                  ->modalSubmitActionLabel('Sim, Excluir')
+                  ->modalCancelActionLabel('Cancelar')
+                  ->successNotificationTitle(null)
+                  ->action(function (JobVacancy $record): void {
+                     try {
+                        $record->delete();
+
+                        Notification::make()
+                           ->title('Formulário excluído!')
+                           ->success()
+                           ->send();
+                     } catch (\Exception $e) {
+                        Notification::make()
+                           ->title('Não foi possível excluir')
+                           ->body($e->getMessage())
+                           ->danger()
+                           ->send();
+                     }
+                  })
             ])
                ->icon('heroicon-m-ellipsis-vertical')
                ->iconSize(IconSize::Small)

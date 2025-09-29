@@ -3,8 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Attributes\Scope;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Attributes\Scope;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class FormTemplate extends Model
 {
@@ -34,6 +35,16 @@ class FormTemplate extends Model
          ->withTimestamps();
    }
 
+   public function jobVacancies(): HasMany
+   {
+      return $this->hasMany(JobVacancy::class);
+   }
+
+   public function companyForms(): HasMany
+   {
+      return $this->hasMany(CompanyForm::class);
+   }
+
    public function sections()
    {
       return $this->hasMany(FormTemplateSection::class)
@@ -55,12 +66,22 @@ class FormTemplate extends Model
    #[Scope]
    protected function vacancyForm(Builder $query): void
    {
-       $query->where('is_vacancy_form', true);
+      $query->where('is_vacancy_form', true);
    }
 
    #[Scope]
    protected function generalForm(Builder $query): void
    {
-       $query->where('is_vacancy_form', false);
+      $query->where('is_vacancy_form', false);
+   }
+
+   protected static function booted()
+   {
+      static::deleting(function ($formTemplate) {
+         if ($formTemplate->companyForms()->exists()
+            || $formTemplate->jobVacancies()->exists()) {
+            throw new \Exception('Este modelo não pode ser excluído pois está relacionado a vagas ou formulários.');
+         }
+      });
    }
 }

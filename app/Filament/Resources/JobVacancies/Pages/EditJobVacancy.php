@@ -2,10 +2,11 @@
 
 namespace App\Filament\Resources\JobVacancies\Pages;
 
-use App\Filament\Resources\JobVacancies\JobVacancyResource;
+use BackedEnum;
+use Filament\Actions\Action;
 use Filament\Actions\DeleteAction;
 use Filament\Resources\Pages\EditRecord;
-use BackedEnum;
+use App\Filament\Resources\JobVacancies\JobVacancyResource;
 
 class EditJobVacancy extends EditRecord
 {
@@ -14,10 +15,14 @@ class EditJobVacancy extends EditRecord
    protected function getHeaderActions(): array
    {
       return [
-         DeleteAction::make(),
+         Action::make('Voltar')
+            ->url($this->getResource()::getUrl('index'))
+            ->icon('heroicon-o-arrow-left')
+            ->size('sm')
+            ->color('gray'),
       ];
    }
-   
+
    public function hasCombinedRelationManagerTabsWithContent(): bool
    {
       return true;

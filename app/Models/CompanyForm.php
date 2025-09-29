@@ -174,7 +174,7 @@ class CompanyForm extends Model
       return $this->formTemplate->redirect_url;
    }
 
-    #[Scope]
+   #[Scope]
    protected function withCompanyForm(Builder $query): void
    {
       $query->whereHas('formTemplate', function ($subQuery) {
@@ -183,11 +183,11 @@ class CompanyForm extends Model
    }
 
    protected static function booted()
-    {
-        static::deleting(function ($companyForm) {
-            if ($companyForm->formResponses()->exists()) {
-                throw new \Exception('Este formulário não pode ser excluído porque possui respostas.');
-            }
-        });
-    }
+   {
+      static::deleting(function ($companyForm) {
+         if ($companyForm->formResponses()->exists()) {
+            throw new \Exception('Este formulário não pode ser excluído porque possui respostas.');
+         }
+      });
+   }
 }

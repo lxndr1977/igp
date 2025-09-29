@@ -17,7 +17,12 @@ class EditCompany extends EditRecord
    protected function getHeaderActions(): array
    {
       return [
-         DeleteAction::make(),
+         Action::make('Voltar')
+            ->url($this->getResource()::getUrl('index'))
+            ->icon('heroicon-o-arrow-left')
+            ->size('sm')
+            ->color('gray'),
+
       ];
    }
 

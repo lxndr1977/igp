@@ -31,14 +31,15 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use App\Filament\Pages\AllFormResponses;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\RichEditor;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Actions\DissociateBulkAction;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Resources\RelationManagers\RelationManager;
-use Filament\Tables\Filters\SelectFilter;
 
 class JobVacanciesRelationManager extends RelationManager
 {
@@ -65,6 +66,7 @@ class JobVacanciesRelationManager extends RelationManager
                ->schema([
                   Select::make('form_template_id')
                      ->label('Modelo de Formulário de Vaga')
+                     ->columnSpanFull()
                      ->options(FormTemplate::vacancyForm()
                         ->where('is_active', true)
                         ->orderBy('name')
@@ -79,6 +81,12 @@ class JobVacanciesRelationManager extends RelationManager
             Section::make('Descrição da Vaga')
                ->columnSpanFull()
                ->schema([
+
+                  Toggle::make('show_company_name')
+                     ->label('Exibir nome da empresa no site?')
+                     ->required()
+                     ->columnSpanFull(),
+
                   TextInput::make('title')
                      ->label('Título da Vaga')
                      ->required()
@@ -102,6 +110,13 @@ class JobVacanciesRelationManager extends RelationManager
 
                         $set('slug', $slug);
                      }),
+
+                  TextInput::make('slug')
+                     ->label('URL da Vaga')
+                     ->helperText('Gerada automaticamente a partir do título.')
+                     ->required()
+                     ->unique(ignoreRecord: true)
+                     ->maxLength(255),
 
                   RichEditor::make('description')
                      ->label('Descrição')
@@ -235,7 +250,7 @@ class JobVacanciesRelationManager extends RelationManager
                ->counts('formResponses')
                ->alignment(Alignment::Center)
                ->badge(),
-               
+
             TextColumn::make('created_at')
                ->label('Criada')
                ->since()
@@ -248,9 +263,7 @@ class JobVacanciesRelationManager extends RelationManager
                ->since()
                ->toggleable(isToggledHiddenByDefault: true),
          ])
-         ->filters([
-      
-         ])
+         ->filters([])
          ->headerActions([
             CreateAction::make()
                ->slideOver(),
@@ -267,8 +280,34 @@ class JobVacanciesRelationManager extends RelationManager
             ActionGroup::make([
                EditAction::make()
                   ->slideOver(),
+                  
+               DeleteAction::make()
+                  ->label('Excluir')
+                  ->icon('heroicon-o-trash')
+                  ->color('danger')
+                  ->tooltip('Remover este vínculo permanentemente')
+                  ->requiresConfirmation()
+                  ->modalHeading('Excluir Empresa')
+                  ->modalDescription('Tem certeza que deseja excluir este formulário? Esta ação não pode ser desfeita.')
+                  ->modalSubmitActionLabel('Sim, Excluir')
+                  ->modalCancelActionLabel('Cancelar')
+                  ->successNotificationTitle(null)
+                  ->action(function (JobVacancy $record): void {
+                     try {
+                        $record->delete();
 
-               DeleteAction::make(),
+                        Notification::make()
+                           ->title('Formulário excluído!')
+                           ->success()
+                           ->send();
+                     } catch (\Exception $e) {
+                        Notification::make()
+                           ->title('Não foi possível excluir')
+                           ->body($e->getMessage())
+                           ->danger()
+                           ->send();
+                     }
+                  })
             ])
                ->icon('heroicon-m-ellipsis-vertical')
                ->iconSize(IconSize::Small)

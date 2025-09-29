@@ -26,9 +26,9 @@ class JobVacancyResource extends Resource
 
    protected static bool $hasTitleCaseModelLabel = false;
 
-   protected static ?string $label = 'Vaga de emprego';
+   protected static ?string $label = 'Vaga de Emprego';
 
-   protected static ?string $pluralLabel = 'Vagas de emprego';
+   protected static ?string $pluralLabel = 'Vagas de Emprego';
 
    public static function form(Schema $schema): Schema
    {

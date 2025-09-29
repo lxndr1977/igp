@@ -2,12 +2,18 @@
 
 namespace App\Filament\Resources\FormTemplates\Tables;
 
+use Filament\Tables\Table;
+use App\Models\FormTemplate;
+use Filament\Actions\EditAction;
+use Filament\Support\Enums\Size;
+use Filament\Actions\ActionGroup;
+use Filament\Actions\DeleteAction;
+use Filament\Support\Enums\IconSize;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Notifications\Notification;
 
 class FormTemplatesTable
 {
@@ -53,7 +59,41 @@ class FormTemplatesTable
             //
          ])
          ->recordActions([
-            EditAction::make(),
+            ActionGroup::make([
+               EditAction::make(),
+
+               DeleteAction::make()
+                  ->label('Excluir')
+                  ->icon('heroicon-o-trash')
+                  ->color('danger')
+                  ->tooltip('Remover este vínculo permanentemente')
+                  ->requiresConfirmation()
+                  ->modalHeading('Excluir Empresa')
+                  ->modalDescription('Tem certeza que deseja excluir este formulário? Esta ação não pode ser desfeita.')
+                  ->modalSubmitActionLabel('Sim, Excluir')
+                  ->modalCancelActionLabel('Cancelar')
+                  ->successNotificationTitle(null)
+                  ->action(function (FormTemplate $record): void {
+                     try {
+                        $record->delete();
+
+                        Notification::make()
+                           ->title('Formulário excluído!')
+                           ->success()
+                           ->send();
+                     } catch (\Exception $e) {
+                        Notification::make()
+                           ->title('Não foi possível excluir')
+                           ->body($e->getMessage())
+                           ->danger()
+                           ->send();
+                     }
+                  })
+            ])
+               ->icon('heroicon-m-ellipsis-vertical')
+               ->iconSize(IconSize::Small)
+               ->size(Size::Small)
+               ->tooltip('Mais ações'),
          ])
          ->toolbarActions([
             BulkActionGroup::make([

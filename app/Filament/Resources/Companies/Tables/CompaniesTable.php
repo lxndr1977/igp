@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Companies\Tables;
 
+use App\Models\Company;
 use Filament\Tables\Table;
 use Filament\Actions\EditAction;
 use Filament\Support\Enums\Size;
@@ -12,6 +13,7 @@ use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Notifications\Notification;
 use Filament\Tables\Filters\SelectFilter;
 
 class CompaniesTable
@@ -64,7 +66,34 @@ class CompaniesTable
          ->recordActions([
             ActionGroup::make([
                EditAction::make(),
-               DeleteAction::make(),
+
+               DeleteAction::make()
+                  ->label('Excluir')
+                  ->icon('heroicon-o-trash')
+                  ->color('danger')
+                  ->tooltip('Remover este vínculo permanentemente')
+                  ->requiresConfirmation()
+                  ->modalHeading('Excluir Empresa')
+                  ->modalDescription('Tem certeza que deseja excluir esta empresa? Esta ação não pode ser desfeita.')
+                  ->modalSubmitActionLabel('Sim, Excluir')
+                  ->modalCancelActionLabel('Cancelar')
+                  ->successNotificationTitle(null)
+                  ->action(function (Company $record): void {
+                     try {
+                        $record->delete();
+
+                        Notification::make()
+                           ->title('Empresa excluído!')
+                           ->success()
+                           ->send();
+                     } catch (\Exception $e) {
+                        Notification::make()
+                           ->title('Não foi possível excluir')
+                           ->body($e->getMessage())
+                           ->danger()
+                           ->send();
+                     }
+                  })
             ])
                ->icon('heroicon-m-ellipsis-vertical')
                ->iconSize(IconSize::Small)

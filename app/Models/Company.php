@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Company extends Model
 {
    use HasFactory;
-   
+
    protected $fillable = ['cnpj', 'name', 'is_active'];
 
    protected $casts = [
@@ -34,5 +34,19 @@ class Company extends Model
    public function jobVacancies(): HasMany
    {
       return $this->hasMany(JobVacancy::class, 'company_id', 'id');
+   }
+
+   protected static function booted()
+   {
+      static::deleting(function ($companyForm) {
+         if (
+            $companyForm->addresses()->exists()
+            || $companyForm->contacts()->exists()
+            || $companyForm->formTemplates()->exists()
+            || $companyForm->jobVacancies()->exists()
+         ) {
+            throw new \Exception('Esta empresa não pode ser excluída porque possui registros associados.');
+         }
+      });
    }
 }
