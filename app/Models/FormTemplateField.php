@@ -122,28 +122,33 @@ class FormTemplateField extends Model
       }
    }
 
-    protected function formattedOptions(): Attribute
+   protected function formattedOptions(): Attribute
    {
-       return Attribute::make(
-           get: function () {
-               // Pega o valor original da coluna 'options'
-               $options = $this->options ?? [];
+      return Attribute::make(
+         get: function () {
+            // Pega o valor original da coluna 'options'
+            $options = $this->options ?? [];
 
-               // Se não for um array ou estiver vazio, retorna um array vazio.
-               if (!is_array($options) || empty($options)) {
-                   return [];
-               }
+            // Se não for um array ou estiver vazio, retorna um array vazio.
+            if (!is_array($options) || empty($options)) {
+               return [];
+            }
 
-               // Transforma o array simples no formato que o MaryUI precisa.
-               return collect($options)->map(function ($optionValue) {
-                   return [
-                       'id'   => $optionValue, 
-                       'name' => $optionValue, 
-                   ];
-               })->all();
-           }
-       );
+            // Transforma o array simples no formato que o MaryUI precisa.
+            return collect($options)->map(function ($optionValue) {
+               return [
+                  'id'   => $optionValue,
+                  'name' => $optionValue,
+               ];
+            })->all();
+         }
+      );
    }
 
-   
+   protected function fieldTypeLabel(): Attribute
+   {
+      return Attribute::make(
+         get: fn() => self::FIELD_TYPES[$this->field_type] ?? 'Desconhecido'
+      );
+   }
 }

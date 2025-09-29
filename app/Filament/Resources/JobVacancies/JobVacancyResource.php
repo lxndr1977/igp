@@ -20,7 +20,7 @@ class JobVacancyResource extends Resource
 {
    protected static ?string $model = JobVacancy::class;
 
-   protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+   protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
    protected static ?string $recordTitleAttribute = 'title';
 

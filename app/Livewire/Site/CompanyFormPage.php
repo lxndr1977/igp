@@ -54,8 +54,7 @@ class CompanyFormPage extends Component
    private function loadJobVacancyForm(string $companyId, string $formSlug)
    {
 
-      $this->jobVacancy = JobVacancy::withVacancyForm()
-         ->where('company_id', $companyId)
+      $this->jobVacancy = JobVacancy::where('company_id', $companyId)
          ->where('slug', $formSlug)
          ->where('status', JobVacancyStatusEnum::Active)
          ->with([
@@ -345,17 +344,42 @@ class CompanyFormPage extends Component
          foreach ($fields as $field) {
             $value = $this->formData[$field->id] ?? null;
 
-            if ($field->isMultipleSelection() && is_array($value)) {
-               $value = array_filter($value);
-            }
+             // --- INÍCIO DA CORREÇÃO ---
 
-            if ($value !== null && $value !== '' && (!is_array($value) || !empty($value))) {
-               FormFieldResponse::create([
-                  'form_response_id' => $formResponse->id,
-                  'form_template_field_id' => $field->id,
-                  'value' => $field->formatValue($value),
-               ]);
+            // 1. Lógica específica para Checkbox
+            if ($field->field_type === 'checkbox') {
+                // Se o checkbox foi marcado, o valor será ['on'] ou algo similar.
+                // Se foi desmarcado, o valor será um array vazio [] ou null.
+                $isChecked = is_array($value) && !empty(array_filter($value));
+                
+                // Salva 'on' para marcado e 'off' para desmarcado.
+                // Isso cria um valor explícito para "Não".
+                $valueToSave = $isChecked ? 'on' : 'off';
+
+                FormFieldResponse::create([
+                    'form_response_id' => $formResponse->id,
+                    'form_template_field_id' => $field->id,
+                    'value' => $field->formatValue($valueToSave), // O método formatValue deve lidar com a string
+                ]);
+
+            } else {
+                // 2. Lógica para outros campos (salvar mesmo se vazio)
+                // A condição original pulava campos vazios. Vamos remover essa restrição.
+                // Isso garante que todos os campos tenham um registro de resposta.
+                
+                if ($field->isMultipleSelection() && is_array($value)) {
+                    $value = array_filter($value);
+                }
+
+                // Salva a resposta, mesmo que o valor seja nulo ou uma string vazia.
+                // A análise de estatísticas pode então filtrar ou interpretar esses valores.
+                FormFieldResponse::create([
+                    'form_response_id' => $formResponse->id,
+                    'form_template_field_id' => $field->id,
+                    'value' => $field->formatValue($value),
+                ]);
             }
+            // --- FIM DA CORREÇÃO ---
          }
 
          $this->clearRateLimit();

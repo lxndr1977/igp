@@ -39,7 +39,7 @@ class CompanyFormResource extends Resource
 {
    protected static ?string $model = CompanyForm::class;
 
-   protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedDocumentText;
+   protected static string | BackedEnum | null $navigationIcon = Heroicon::OutlinedDocument;
 
    protected static ?string $recordTitleAttribute = 'title';
 

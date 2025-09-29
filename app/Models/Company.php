@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Builder;
 
 class Company extends Model
 {
@@ -15,6 +17,20 @@ class Company extends Model
    protected $casts = [
       'is_active' => 'boolean',
    ];
+
+   protected static function booted()
+   {
+      static::deleting(function ($companyForm) {
+         if (
+            $companyForm->addresses()->exists()
+            || $companyForm->contacts()->exists()
+            || $companyForm->formTemplates()->exists()
+            || $companyForm->jobVacancies()->exists()
+         ) {
+            throw new \Exception('Esta empresa não pode ser excluída porque possui registros associados.');
+         }
+      });
+   }
 
    public function addresses(): HasMany
    {
@@ -36,17 +52,16 @@ class Company extends Model
       return $this->hasMany(JobVacancy::class, 'company_id', 'id');
    }
 
-   protected static function booted()
+   public function contactEmails(): array
    {
-      static::deleting(function ($companyForm) {
-         if (
-            $companyForm->addresses()->exists()
-            || $companyForm->contacts()->exists()
-            || $companyForm->formTemplates()->exists()
-            || $companyForm->jobVacancies()->exists()
-         ) {
-            throw new \Exception('Esta empresa não pode ser excluída porque possui registros associados.');
-         }
-      });
+      return $this->contacts()
+         ->select('id', 'name', 'email')
+         ->pluck('name', 'email')
+         ->toArray();
    }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true);
+    }
 }

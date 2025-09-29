@@ -5,17 +5,19 @@ namespace App\Filament\Resources\JobVacancies\Schemas;
 use Closure;
 use App\Models\JobVacancy;
 use Illuminate\Support\Str;
+use App\Models\FormTemplate;
 use Filament\Schemas\Schema;
 use App\Enums\WorkLocationEnum;
 use App\Enums\EmploymentTypeEnum;
 use App\Enums\JobVacancyStatusEnum;
-use App\Models\FormTemplate;
+use App\Models\Company;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
 use Filament\Schemas\Components\Section;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\RichEditor;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 
@@ -31,7 +33,7 @@ class JobVacancyForm
                ->schema([
                   Select::make('company_id')
                      ->label('Empresa')
-                     ->relationship('company', 'name')
+                     ->options(Company::active()->orderBy('name')->pluck('name', 'id')->toArray())
                      ->required()
                      ->reactive(),
 
@@ -86,18 +88,35 @@ class JobVacancyForm
                         $set('slug', $slug);
                      }),
 
-                  Textarea::make('description')
+                  RichEditor::make('description')
                      ->label('Descrição')
                      ->required()
-                     ->columnSpanFull(),
+                     ->columnSpanFull()
+                     ->extraInputAttributes(['style' => 'min-height: 18em;'])
+                     ->extraAttributes(['class' => 'toolbar-sm'])
+                     ->toolbarButtons(
+                        ['bold', 'italic', 'underline', 'subscript', 'superscript', 'bulletList', 'orderedList'],
+                     ),
 
-                  Textarea::make('requirements')
+                  RichEditor::make('requirements')
                      ->label('Requisitos')
-                     ->columnSpanFull(),
+                     ->required()
+                     ->columnSpanFull()
+                     ->extraInputAttributes(['style' => 'min-height: 18em;'])
+                     ->extraAttributes(['class' => 'toolbar-sm'])
+                     ->toolbarButtons(
+                        ['bold', 'italic', 'underline', 'subscript', 'superscript', 'bulletList', 'orderedList'],
+                     ),
 
-                  Textarea::make('benefits')
+                  RichEditor::make('benefits')
                      ->label('Benefícios')
-                     ->columnSpanFull(),
+                     ->required()
+                     ->columnSpanFull()
+                     ->extraInputAttributes(['style' => 'min-height: 18em;'])
+                     ->extraAttributes(['class' => 'toolbar-sm'])
+                     ->toolbarButtons(
+                        ['bold', 'italic', 'underline', 'subscript', 'superscript', 'bulletList', 'orderedList'],
+                     ),
                ]),
             Section::make('Detalhes da Posição')
                ->columns(3)

@@ -128,13 +128,25 @@ class JobVacanciesRelationManager extends RelationManager
                         ['bold', 'italic', 'underline', 'subscript', 'superscript', 'bulletList', 'orderedList'],
                      ),
 
-                  Textarea::make('requirements')
+                  RichEditor::make('requirements')
                      ->label('Requisitos')
-                     ->columnSpanFull(),
+                     ->required()
+                     ->columnSpanFull()
+                     ->extraInputAttributes(['style' => 'min-height: 18em;'])
+                     ->extraAttributes(['class' => 'toolbar-sm'])
+                     ->toolbarButtons(
+                        ['bold', 'italic', 'underline', 'subscript', 'superscript', 'bulletList', 'orderedList'],
+                     ),
 
-                  Textarea::make('benefits')
+                  RichEditor::make('benefits')
                      ->label('Benefícios')
-                     ->columnSpanFull(),
+                     ->required()
+                     ->columnSpanFull()
+                     ->extraInputAttributes(['style' => 'min-height: 18em;'])
+                     ->extraAttributes(['class' => 'toolbar-sm'])
+                     ->toolbarButtons(
+                        ['bold', 'italic', 'underline', 'subscript', 'superscript', 'bulletList', 'orderedList'],
+                     ),
                ]),
             Section::make('Detalhes da Posição')
                ->columns(3)
@@ -194,7 +206,7 @@ class JobVacanciesRelationManager extends RelationManager
                ]),
 
             Section::make('Configurações da Vaga')
-               ->columns(2)
+               ->columns(3)
                ->columnSpanFull()
                ->schema([
                   DatePicker::make('application_deadline')
@@ -280,7 +292,7 @@ class JobVacanciesRelationManager extends RelationManager
             ActionGroup::make([
                EditAction::make()
                   ->slideOver(),
-                  
+
                DeleteAction::make()
                   ->label('Excluir')
                   ->icon('heroicon-o-trash')

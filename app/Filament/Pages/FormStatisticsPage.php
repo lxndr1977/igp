@@ -129,7 +129,7 @@ class FormStatisticsPage extends Page implements HasForms
       ];
 
       if ($this->canGenerateChart($fieldType)) {
-         $statistics['chart_data'] = $this->generateChartData($responses);
+         $statistics['chart_data'] = $this->generateChartData($responses, $fieldType, $totalResponses);
       } else {
          $statistics['text_responses'] = $this->generateTextResponses($responses);
       }
@@ -142,44 +142,112 @@ class FormStatisticsPage extends Page implements HasForms
       return in_array($fieldType, [
          'select',
          'select_single',
+         'select_multiple',
+         'scale',
          'radio',
          'checkbox',
          'boolean',
-         'rating'
+         'rating',
       ]);
    }
 
-   protected function generateChartData(Collection $responses): array
+   
+   protected function generateChartData(Collection $responses, string $fieldType, int $totalFormResponses): array
    {
-      $valueCounts = collect();
+      $isCheckboxField = $fieldType === 'checkbox';
 
-      foreach ($responses as $response) {
-         $value = $response->value;
+      $totalFormResponses = $responses->count();
 
-         // CORREÇÃO 4: Verificar se value é JSON e decodificar
-         if (is_string($value) && $this->isJson($value)) {
-            $value = json_decode($value, true);
+
+      // Para checkbox, inicializar contadores como array
+      if ($isCheckboxField) {
+         $marcados = 0;
+
+         // Contar apenas os que estão marcados (Sim)
+         foreach ($responses as $response) {
+            $value = $response->value;
+
+            // Decodificar se for JSON string
+            if (is_string($value) && $this->isJson($value)) {
+               $value = json_decode($value, true);
+            }
+
+            // Verifica se está marcado (tem 'on' no array ou array não vazio)
+            $isChecked = false;
+            if (is_array($value) && !empty($value)) {
+               $isChecked = in_array('on', $value) || count(array_filter($value)) > 0;
+            } elseif ($value) {
+               $isChecked = true;
+            }
+
+            if ($isChecked) {
+               $marcados++;
+            }
          }
 
-         if (is_array($value)) {
-            // Para checkboxes que podem ter múltiplos valores
-            foreach ($value as $item) {
-               $item = $item ?: 'Sem resposta';
-               $valueCounts[$item] = ($valueCounts[$item] ?? 0) + 1;
+         $valueCounts = [
+            'Sim' => $marcados,
+            'Não' => $totalFormResponses,
+         ];
+      } else {
+         // Para outros tipos de campo
+         $valueCounts = [];
+
+         foreach ($responses as $response) {
+            $value = $response->value;
+
+            // Decodificar se for JSON string
+            if (is_string($value) && $this->isJson($value)) {
+               $value = json_decode($value, true);
             }
-         } else {
-            $value = $value ?: 'Sem resposta';
-            $valueCounts[$value] = ($valueCounts[$value] ?? 0) + 1;
+
+            // Processar baseado no tipo de estrutura
+            if (is_array($value)) {
+               // Verificar se é um array associativo (select_multiple)
+               if ($this->isAssocArray($value)) {
+                  // Para select_multiple: {"A":[true],"B":{"1":true}}
+                  // As chaves são as opções selecionadas
+                  foreach (array_keys($value) as $item) {
+                     $item = $item ?: 'Sem resposta';
+                     $valueCounts[$item] = ($valueCounts[$item] ?? 0) + 1;
+                  }
+               } else {
+                  // Para arrays simples
+                  foreach ($value as $item) {
+                     $item = $item ?: 'Sem resposta';
+                     $valueCounts[$item] = ($valueCounts[$item] ?? 0) + 1;
+                  }
+               }
+            } else {
+               // Para valores simples (radio, select, etc)
+               $value = $value ?: 'Sem resposta';
+               $valueCounts[$value] = ($valueCounts[$value] ?? 0) + 1;
+            }
          }
       }
 
-      return $valueCounts->map(function ($count, $value) use ($responses) {
+      // Garantir que sempre retorna um array válido
+      if (empty($valueCounts)) {
+         return [];
+      }
+
+      // Converter para collection apenas para mapear
+      return collect($valueCounts)->map(function ($count, $value) use ($totalFormResponses) {
          return [
-            'label' => $value,
-            'value' => $count,
-            'percentage' => round(($count / $responses->count()) * 100, 1)
+            'label' => (string) $value,
+            'value' => (int) $count,
+            'percentage' => round(($count / $totalFormResponses) * 100, 1)
          ];
       })->values()->toArray();
+   }
+
+   // Adicionar este método helper após o método isJson()
+   private function isAssocArray(array $arr): bool
+   {
+      if (empty($arr)) {
+         return false;
+      }
+      return array_keys($arr) !== range(0, count($arr) - 1);
    }
 
    protected function generateTextResponses(Collection $responses): array
@@ -187,20 +255,36 @@ class FormStatisticsPage extends Page implements HasForms
       return $responses->map(function ($response) {
          $value = $response->value;
 
-         // CORREÇÃO 5: Verificar se value é JSON e decodificar
+         // Verificar se value é JSON e decodificar
          if (is_string($value) && $this->isJson($value)) {
             $value = json_decode($value, true);
          }
 
+         // Formatar o valor para exibição
+         $displayValue = 'Sem resposta';
+
+         if (is_array($value)) {
+            // Se for array, filtrar valores vazios e juntar com vírgula
+            $filtered = array_filter($value, function ($item) {
+               return !is_null($item) && $item !== '';
+            });
+
+            if (!empty($filtered)) {
+               // Se os itens do array forem arrays também, converter para JSON
+               $displayValue = implode(', ', array_map(function ($item) {
+                  return is_array($item) ? json_encode($item) : $item;
+               }, $filtered));
+            }
+         } elseif (!is_null($value) && $value !== '') {
+            $displayValue = (string) $value;
+         }
+
          return [
-            'value' => is_array($value)
-               ? implode(', ', $value)
-               : ($value ?: 'Sem resposta'),
+            'value' => $displayValue,
             'submitted_at' => $response->formResponse->submitted_at->format('d/m/Y H:i')
          ];
       })->toArray();
    }
-
    // CORREÇÃO 6: Método helper para verificar se string é JSON
    private function isJson($string): bool
    {

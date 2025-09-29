@@ -82,8 +82,8 @@ class FormResponsesRelationManager extends RelationManager
          ])
          ->recordActions([
             Action::make('viewResponse')
-               ->label('Resposta')
-               ->icon('heroicon-o-eye')
+               ->label('Currículo')
+               ->icon('heroicon-o-document-text')
                ->url(fn($record) => route('form-response-details', [
                   'templateId' => $record->subject_id,
                   'responseId' => $record->id,

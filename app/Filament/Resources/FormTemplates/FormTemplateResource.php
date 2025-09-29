@@ -20,7 +20,7 @@ class FormTemplateResource extends Resource
 {
    protected static ?string $model = FormTemplate::class;
 
-   protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+   protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocument;
 
    protected static ?string $recordTitleAttribute = 'name';
 

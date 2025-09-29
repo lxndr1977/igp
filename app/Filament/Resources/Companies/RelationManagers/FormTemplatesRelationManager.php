@@ -97,7 +97,7 @@ class FormTemplatesRelationManager extends RelationManager
                }),
 
             TextInput::make('title')
-               ->label('Título para este Vínculo')
+               ->label('Título')
                ->helperText('Este título será exibido para os usuários que acessarem o formulário.')
                ->required()
                ->maxLength(255)

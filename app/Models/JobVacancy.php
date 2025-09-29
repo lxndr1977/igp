@@ -144,15 +144,7 @@ class JobVacancy extends Model
          : 'Confidencial';
    }
 
-   #[Scope]
-   protected function withVacancyForm(Builder $query): void
-   {
-      // $query->whereHas('formTemplate', function ($subQuery) {
-      //    $subQuery->where('is_vacancy_form', true);
-      // });
-
-   }
-
+   
    protected static function booted()
    {
       static::deleting(function ($jobVacancy) {

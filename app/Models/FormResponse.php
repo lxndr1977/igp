@@ -78,8 +78,18 @@ class FormResponse extends Model
       return null;
    }
 
+   public function getCompanyIdAttribute(): ?int
+   {
+      return $this->subject->company->id ?? null;
+   }
+
    public function getFormTypeAttribute(): string
    {
       return class_basename($this->subject_type);
+   }
+
+   public function getJobVacancyAttribute(): ?JobVacancy
+   {
+      return $this->subject_type === JobVacancy::class ? $this->subject : null;
    }
 }
