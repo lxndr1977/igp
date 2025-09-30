@@ -26,7 +26,7 @@
                   <x-tabler-brand-whatsapp class="w-5 h-5" />
                   <span >Fale conosco</span>
                </a>
-               <a href="https://web.whatsapp.com/send?phone=5554996831871" class="btn btn-outline w-auto btn-lg py-4 px-8  flex items-center gap-2">
+               <a href="{{ route('site.job-vacancies') }}" class="btn btn-outline w-auto btn-lg py-4 px-8  flex items-center gap-2">
                   <x-tabler-users class="w-5 h-5" />
                   <span >Ver Vagas</span>
                </a>
