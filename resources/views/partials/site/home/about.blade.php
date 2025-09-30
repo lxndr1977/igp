@@ -27,7 +27,7 @@
           </div>
 
           <div class="order-1 md:order-2">
-             <img src="{{ asset('images/rochelle-machado.webp') }}"
+             <img src="{{ asset('images/hero4.webp') }}"
                 alt="Foto Rochelle Machado"
                 loading="lazy"
                 class="rounded-lg max-w-md w-full mx-auto">
