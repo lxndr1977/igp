@@ -15,7 +15,7 @@
             <div class="bg-gray-200 rounded-full h-2.5">
                <div class="bg-primary h-2.5 rounded-full"
                   style="width: {{ ($currentStep / $totalSteps) * 100 }}%">
-               </div> 
+               </div>
             </div>
 
             <p class="text-center text-sm text-gray-600 mt-2">Passo {{ $currentStep }} de {{ $totalSteps }}
@@ -73,37 +73,40 @@
             @endforeach
          </div>
 
-         <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-y-6">
-            @if ($currentStep > 1)
-               <x-mary-button
-                  wire:click="previousStep"
-                  icon="tabler.arrow-left"
-                  class="text-base py-6 order-2 md:order-1 w-full md:-w-auto"
-                  label="Voltar" />
-            @else
-               <x-mary-button
-                  wire:click="backToIntro"
-                  icon="tabler.arrow-left"
-                  class="text-base py-6 order-1 md:order-2 w-full md:-w-auto"
-                  label="Voltar" />
-            @endif
+         <div>
 
-            @if ($currentStep < $totalSteps)
-               <x-mary-button
-                  wire:click="nextStep"
-                  class="btn-primary text-base order-2 md:order-1 py-6 w-full md:-w-auto"
-                  icon-right="tabler.arrow-right"
-                  label="Avançar"
-                  spinner="nextStep" />
-            @else
-               <x-mary-button
-                  wire:click="submit"
-                  wire:loading.attr="disabled"
-                  icon="tabler.send"
-                  label="{{ $isJobVacancy && $jobVacancy ? 'Enviar currículo' : 'Enviar respostas' }}"
-                  spinner="submit"
-                  class="btn btn-primary text-base py-6 order-1 md:order-2 w-full md:-w-auto" />
-            @endif
+            <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
+               @if ($currentStep > 1)
+                  <x-mary-button
+                     wire:click="previousStep"
+                     icon="tabler.arrow-left"
+                     class="text-base py-6 order-2 md:order-1 w-full md:-w-auto flex-1"
+                     label="Voltar" />
+               @else
+                  <x-mary-button
+                     wire:click="backToIntro"
+                     icon="tabler.arrow-left"
+                     class="text-base py-6 order-2 md:order-1 w-full md:-w-auto flex-1"
+                     label="Voltar" />
+               @endif
+
+               @if ($currentStep < $totalSteps)
+                  <x-mary-button
+                     wire:click="nextStep"
+                     class="btn-primary text-base order-1 md:order-2 py-6 w-full md:-w-auto flex-1"
+                     icon-right="tabler.arrow-right"
+                     label="Avançar"
+                     spinner="nextStep" />
+               @else
+                  <x-mary-button
+                     wire:click="submit"
+                     wire:loading.attr="disabled"
+                     icon="tabler.send"
+                     label="{{ $isJobVacancy && $jobVacancy ? 'Enviar currículo' : 'Enviar respostas' }}"
+                     spinner="submit"
+                     class="btn btn-primary text-base py-6 order-1 md:order-2 w-full md:-w-auto flex-1" />
+               @endif
+            </div>
          </div>
       @else
          <div class="space-y-6">
@@ -143,18 +146,18 @@
          <div class="pt-12  ">
             <div class="flex flex-col md:flex-row justify-between items-center gap-y-6">
                <x-mary-button
-               wire:click="backToIntro"
-               icon="tabler.arrow-left"
-               class="text-base py-6 w-full md:w-auto order-2 md:order-1"
-               label="Voltar às Informações" />
-               
+                  wire:click="backToIntro"
+                  icon="tabler.arrow-left"
+                  class="text-base py-6 w-full md:w-auto order-2 md:order-1"
+                  label="Voltar às Informações" />
+
                <x-mary-button
-               wire:click="submit"
-               wire:loading.attr="disabled"
-               icon="tabler.send"
-               label="{{ $isJobVacancy && $jobVacancy ? 'Enviar currículo' : 'Enviar respostas' }}"
-               spinner="submit"
-               class="btn btn-primary w-full md:w-auto text-base py-6 order-1 md:order-2" />
+                  wire:click="submit"
+                  wire:loading.attr="disabled"
+                  icon="tabler.send"
+                  label="{{ $isJobVacancy && $jobVacancy ? 'Enviar currículo' : 'Enviar respostas' }}"
+                  spinner="submit"
+                  class="btn btn-primary w-full md:w-auto text-base py-6 order-1 md:order-2" />
             </div>
          </div>
       @endif
