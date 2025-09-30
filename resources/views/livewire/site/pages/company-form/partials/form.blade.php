@@ -2,9 +2,11 @@
    <form wire:submit.prevent="submit" class="mx-auto">
 
       @if (session()->has('error'))
-         <div class="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
-            <p class="text-sm text-red-800">{{ session('error') }}</p>
-         </div>
+         <x-mary-alert
+            icon="o-exclamation-triangle"
+            title="Atenção!"
+            description="{{ session('error') }}"
+            class="alert alert-error alert-soft mb-6 text-base" />
       @endif
 
       @if ($form->sections->count() > 1)
@@ -28,13 +30,20 @@
 
                   <div class="border-b border-gray-200 pb-6">
                      <h3 class="text-lg font-medium text-gray-900 mb-4">Seus dados</h3>
-                     <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                     <div class="grid grid-cols-1 gap-4">
                         @if ($form->collect_name)
                            <div class="space-y-2">
                               <label for="respondent_name" class="block text-sm font-medium text-gray-700">Nome
                               </label>
-                              <x-mary-input type="text" id="respondent_name"
-                                 wire:model.defer="respondent_name" />
+                              <x-mary-input type="text" id="respondent_name" class="input-lg"
+                                 wire:model.defer="respondent_name"
+                                 x-data
+                                 x-on:input="
+                                    $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+                                    
+                                    let label = $el.closest('label.input');
+                                    if(label) label.classList.remove('!input-error');
+                                 " />
                            </div>
                         @endif
 
@@ -43,8 +52,15 @@
                               <label for="respondent_email"
                                  class="block text-sm font-medium text-gray-700">E-mail
                               </label>
-                              <x-mary-input type="email" id="respondent_email"
-                                 wire:model.defer="respondent_email" />
+                              <x-mary-input type="email" id="respondent_email" class="input-lg"
+                                 wire:model.defer="respondent_email"
+                                 x-data
+                                 x-on:input="
+                                    $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+                                    
+                                    let label = $el.closest('label.input');
+                                    if(label) label.classList.remove('!input-error');
+                                 " />
                            </div>
                         @endif
                      </div>

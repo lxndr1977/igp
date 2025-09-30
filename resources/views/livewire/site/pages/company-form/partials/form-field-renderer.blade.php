@@ -14,51 +14,103 @@
 
       <x-mary-input
          type="text"
+         class="input-lg"
          wire:model="formData.{{ $field->id }}"
          wire:key="formData.{{ $field->id }}"
-         placeholder="{{ $field->placeholder }}" />
+         placeholder="{{ $field->placeholder }}"
+         x-data
+         x-on:input="
+            $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+            
+            let label = $el.closest('label.input');
+            if(label) label.classList.remove('!input-error');
+         " />
 
       <!-- Campo Textarea -->
    @elseif($field->field_type === 'textarea')
       <x-mary-textarea
          wire:model="formData.{{ $field->id }}"
+         class="textarea-lg"
          placeholder="{{ $field->placeholder }}"
-         rows="4" />
+         rows="4"
+         x-data
+         x-on:input="
+            $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+            
+            let label = $el.closest('label.input');
+            if(label) label.classList.remove('!input-error');
+         " />
 
       <!-- Campo Email -->
    @elseif($field->field_type === 'email')
       <x-mary-input
          type="email"
+         class="input-lg"
          wire:model="formData.{{ $field->id }}"
-         placeholder="{{ $field->placeholder }}" />
+         placeholder="{{ $field->placeholder }}"
+         x-data
+         x-on:input="
+            $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+            
+            let label = $el.closest('label.input');
+            if(label) label.classList.remove('!input-error');
+         " />
 
       <!-- Campo Number -->
    @elseif($field->field_type === 'number')
       <x-mary-input
          type="number"
+         class="input-lg"
          wire:model="formData.{{ $field->id }}"
-         placeholder="{{ $field->placeholder }}" />
+         placeholder="{{ $field->placeholder }}"
+         x-data
+         x-on:input="
+            $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+            
+            let label = $el.closest('label.input');
+            if(label) label.classList.remove('!input-error');
+         " />
 
       <!-- Campo Tel -->
    @elseif($field->field_type === 'tel')
       <x-mary-input
          type="tel"
+         class="input-lg"
          wire:model="formData.{{ $field->id }}"
-         placeholder="{{ $field->placeholder }}" />
-
+         placeholder="{{ $field->placeholder }}" x-data
+         x-on:input="
+            $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+            
+            let label = $el.closest('label.input');
+            if(label) label.classList.remove('!input-error');
+         " />
       <!-- Campo Date -->
    @elseif($field->field_type === 'date')
       <x-mary-datetime type="date"
-         wire:model="formData.{{ $field->id }}" />
+         wire:model="formData.{{ $field->id }}" x-data
+         x-on:input="
+            $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+            
+            let label = $el.closest('label.datetime');
+            if(label) label.classList.remove('!datetime-error');
+         " />
 
       <!-- Select Single -->
    @elseif($field->field_type === 'select_single')
       <x-mary-select
+         class="select-lg"
          wire:model="formData.{{ $field->id }}"
          :options="$field->formatted_options"
          option-value="id"
          option-label="name"
-         placeholder="{{ $field->placeholder ?? 'Selecione uma opção' }}" />
+         placeholder="{{ $field->placeholder ?? 'Selecione uma opção' }}"
+         x-data
+         x-on:input="
+            $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+            
+            let label = $el.closest('label.select');
+            if(label) label.classList.remove('!select-error');
+         " />
 
       <!-- Select Multiple -->
    @elseif($field->field_type === 'select_multiple')
@@ -66,9 +118,17 @@
          <div class="space-y-2" wire:key="formData.{{ $field->id }}.{{ $loop->index }}">
             <label class="flex items-center space-x-2">
                <x-mary-checkbox
+                  class="checkbox-lg"
                   label="{{ $option['id'] }}"
                   value="{{ $option['name'] }}"
-                  wire:model="formData.{{ $field->id }}.{{ $option['id'] }}.{{ $loop->index }}" />
+                  wire:model="formData.{{ $field->id }}.{{ $option['id'] }}.{{ $loop->index }}"
+                  x-data
+                  x-on:input="
+                     $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+                     
+                     let label = $el.closest('label.checkbox');
+                     if(label) label.classList.remove('!checkbox-error');
+                  " />
             </label>
          </div>
       @endforeach
@@ -78,18 +138,35 @@
       <div class="space-y-2">
          <x-mary-radio
             type="radio"
+            class="radio-lg"
             wire:model="formData.{{ $field->id }}"
             :options="$field->formatted_options"
             option-value="id"
-            option-label="name" />
+            option-label="name"
+            x-data
+            x-on:input="
+               $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+               
+               let label = $el.closest('label.radio');
+               if(label) label.classList.remove('!radio-error');
+            " />
+
       </div>
 
       <!-- Checkboxes -->
    @elseif($field->field_type === 'checkbox')
       <div class="flex flex-row items-center gap-2">
          <x-mary-checkbox
+            class="checkbox-lg"
             wire:model="formData.{{ $field->id }}"
-            label="{{ $field->label }}" />
+            label="{{ $field->label }}"
+            x-data
+            x-on:input="
+               $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+               
+               let label = $el.closest('label.checkbox');
+               if(label) label.classList.remove('!checkbox-error');
+            " />
 
          @if ($field->is_required == false)
             <span class="text-sm text-gray-600 font-medium">(opcional)</span>
@@ -131,6 +208,7 @@
          @endif
 
          <x-mary-radio
+            class="radio-lg"
             :options="$this->getScaleOptionsWithLabels($minValue, $maxValue)"
             wire:model="formData.{{ $field->id }}"
             inline />
