@@ -202,24 +202,20 @@ class CompanyFormPage extends Component
       // Pega as regras da etapa atual
       $rules = $this->getRulesForCurrentStep();
 
-      // Se não houver regras específicas para a etapa, usa todas as regras como fallback
-      if (empty($rules)) {
-         $rules = $this->rules(); // método rules() já definido no seu componente
-      }
-
-      // Valida somente se houver regras
+      // Valida apenas se houver regras
       if (!empty($rules)) {
          $this->validate($rules, $this->getMessages());
       }
 
-      // Avança para a próxima etapa
+      // Avança para a próxima etapa, mesmo que não haja regras
       if ($this->currentStep < $this->form->sections->count()) {
          $this->currentStep++;
       } else {
-         // Se estiver na última etapa, pode executar submit ou marcar como finalizado
-         $this->submit(); // opcional: se quiser submeter automaticamente ao chegar na última etapa
+         // Última etapa atingida
+         $this->submitted = true; // ou chamar $this->submit() se quiser submeter
       }
    }
+
 
    /**
     * Define as regras de validação para todos os campos do formulário.
