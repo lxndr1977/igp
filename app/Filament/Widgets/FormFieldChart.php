@@ -76,25 +76,25 @@ class FormFieldChart extends ChartWidget
    }
 
    protected function getType(): string
-{
-    if (!$this->field) {
-        return 'bar';
-    }
+   {
+      if (!$this->field) {
+         return 'bar';
+      }
 
-    // Determinar o tipo de gráfico baseado no tipo do campo
-    return match ($this->field->field_type) {
-        // Para escolhas binárias ou de um único item de uma lista.
-        // Mostra a proporção de um todo (100%).
-        'checkbox', 'boolean', 'radio', 'select', 'select_single' => 'pie',
+      // Determinar o tipo de gráfico baseado no tipo do campo
+      return match ($this->field->field_type) {
+         // Para escolhas binárias ou de um único item de uma lista.
+         // Mostra a proporção de um todo (100%).
+         'checkbox', 'boolean', 'radio', 'select', 'select_single' => 'pie',
 
-        // Para escolhas múltiplas ou escalas.
-        // Compara a contagem/popularidade entre itens independentes.
-        'select_multiple', 'scale', 'rating' => 'bar',
+         // Para escolhas múltiplas ou escalas.
+         // Compara a contagem/popularidade entre itens independentes.
+         'select_multiple', 'scale', 'rating' => 'bar',
 
-        // 'bar' como padrão para qualquer outro tipo.
-        default => 'bar'
-    };
-}
+         // 'bar' como padrão para qualquer outro tipo.
+         default => 'bar'
+      };
+   }
 
    protected function getOptions(): array
    {

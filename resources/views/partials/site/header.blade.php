@@ -95,7 +95,7 @@
      :class="{ '-translate-y-full': !headerVisible, 'translate-y-0': headerVisible }">
 
      <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-1 border-secondary-500">
-        <div class="flex justify-between items-center py-2">
+        <div class="flex justify-between items-center py-3">
 
            <!-- Logo -->
            <div class="flex-shrink-0 flex items-center">

@@ -1,42 +1,45 @@
 <section
-   class="bg-secondary-600 text-white pb-20"
+   class="text-white bg-gradient-to-t from-secondary-600/90 via-secondary-600 to-secondary-600"
    x-data="{ headerHeight: 0 }"
-   x-init="headerHeight = document.querySelector('header').offsetHeight + 60  || 0;
+   x-init="headerHeight = document.querySelector('header').offsetHeight + 100 || 0;
    $nextTick(() => {
        window.addEventListener('resize', () => {
-           headerHeight = document.querySelector('header').offsetHeight + 60  || 0;
+           headerHeight = document.querySelector('header').offsetHeight + 100 || 0;
        });
    });"
-   :style="`padding-top: ${headerHeight}px`">
-   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="flex flex-col md:flex-row items-center justify-center gap-12">
-         <!-- Coluna de Texto -->
-         <div class="flex-1 text-center md:text-left">
-            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-6">
-               Inovação em Gestão de Pessoas
-            </h1>
-            <p class="text-xl md:text-2xl mb-8 text-blue-100">
-               Inovamos, instruímos e inspiramos organizações, ajudando-as a encontrar os melhores talentos para suas
-               necessidades de negócios
-            </p>
-            <x-mary-button label="Fale conosco" link="#contato" class="btn btn-primary btn-lg" />
-         </div>
+   :style="`padding-top: ${headerHeight}px; padding-bottom: 6rem;`">
+   <div class="max-w-7xl mx-auto px-6 lg:px-8 py-12">
+      <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-12">
 
-         <!-- Coluna da Foto -->
-         <div class="flex-1">
-            <div class="bg-white/10 rounded-lg p-8 backdrop-blur-sm">
-               <div class="aspect-square bg-white/20 rounded-lg flex items-center justify-center">
-                  <svg class="w-24 h-24 text-white/60" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1"
-                        d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z">
-                     </path>
-                  </svg>
-               </div>
-               <p class="text-center text-white/80 mt-4 text-sm">
-                  [Substitua por uma imagem da equipe ou escritório]
-               </p>
+         <!-- Texto -->
+         <div class="w-full md:w-[48%] text-center md:text-left space-y-6">
+            <h1 class="text-4xl md:text-5xl text-balance font-medium leading-tighter">
+               Inovação em Gestão de Pessoas: impulsionando empresas e profissionais </h1>
+            <p class="text-lg md:text-xl  max-w-xl md:max-w-none mx-auto md:mx-0 mb-12">
+               Oferecemos soluções inovadoras em gestão de pessoas para organizações e apoiamos profissionais no
+               crescimento de suas carreiras.
+            </p>
+
+            <div class="flex flex-row gap-6">
+
+               <a href="https://web.whatsapp.com/send?phone=5554996831871" class="btn btn-primary w-auto btn-lg py-4 px-8 flex items-center gap-2">
+                  <x-tabler-brand-whatsapp class="w-5 h-5" />
+                  <span >Fale conosco</span>
+               </a>
+               <a href="https://web.whatsapp.com/send?phone=5554996831871" class="btn btn-outline w-auto btn-lg py-4 px-8  flex items-center gap-2">
+                  <x-tabler-users class="w-5 h-5" />
+                  <span >Ver Vagas</span>
+               </a>
             </div>
          </div>
+
+         <!-- Imagem -->
+         <div class="w-full md:w-[52%] flex justify-center md:justify-end">
+            <img src="{{ asset('images/hero.webp') }}"
+               alt="Hero"
+               class="w-full object-contain rounded-xl">
+         </div>
+
       </div>
    </div>
 </section>
