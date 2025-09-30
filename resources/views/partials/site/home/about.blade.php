@@ -24,7 +24,7 @@
                 icon="tabler.brand-whatsapp"
                 class="btn btn-primary text-base px-12 py-6"
                 label="Fale conosco" />
-          </div>
+          </div> 
 
           <div class="order-1 md:order-2">
              <img src="{{ asset('images/hero4.webp') }}"
