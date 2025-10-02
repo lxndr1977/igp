@@ -1,19 +1,30 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
+   <head>
+      @include('partials.head')
+   </head>
 
-<head>
-   @include('partials.head')
-</head>
+   <body class="min-h-screen bg-white">
 
-<body class="min-h-screen bg-white">
+      {{-- @include('partials.site.header') --}}
 
-   @include('partials.site.header')
+      {{ $slot }}
 
-   {{ $slot }}
+      {{-- @include('partials.site.footer') --}}
 
-   @include('partials.site.footer')
+      @livewireScripts
 
-   @livewireScripts
-</body>
-
+      @push('scripts')
+         <script>
+            // Scroll para o topo quando mudar de etapa
+            Livewire.on('stepChanged', () => {
+               window.scrollTo({
+                  top: 0,
+                  behavior: 'smooth'
+               });
+               console.log('mudou');
+            });
+         </script>
+      @endpush
+   </body>
 </html>

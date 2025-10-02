@@ -1,5 +1,10 @@
-<div class="bg-white w-full rounded-lg shadow p-8 border border-neutral-200">
-   <form wire:submit.prevent="submit" class="mx-auto">
+<div class="bg-white w-full rounded-lg shadow p-8 border border-neutral-200"
+     x-data="{ 
+         currentStep: @entangle('currentStep') 
+     }"
+     x-init="$watch('currentStep', value => {
+         window.scrollTo({ top: 0, behavior: 'smooth' });
+     })">   <form wire:submit.prevent="submit" class="mx-auto">
 
       @if (session()->has('error'))
          <x-mary-alert
@@ -254,3 +259,4 @@
       @endif
    </form>
 </div>
+

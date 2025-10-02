@@ -190,6 +190,7 @@ class CompanyFormPage extends Component
    {
       if ($this->currentStep > 1) {
          $this->currentStep--;
+         $this->dispatch('stepChanged');
       } elseif ($this->currentStep === 1) {
          $this->backToIntro();
       }
@@ -215,6 +216,8 @@ class CompanyFormPage extends Component
          // Última etapa atingida
          $this->submitted = true; // ou chamar $this->submit() se quiser submeter
       }
+
+      $this->dispatch('stepChanged');
    }
 
 
