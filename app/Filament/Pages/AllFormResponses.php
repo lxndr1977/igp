@@ -108,6 +108,7 @@ class AllFormResponses extends Page implements HasTable
 
          ->columns([
             TextColumn::make('respondent_name')->label('Respondente')->searchable(),
+            TextColumn::make('respondent_phone')->label('phone')->searchable(),
             TextColumn::make('respondent_email')->label('Email')->searchable(),
             TextColumn::make('company_name')->label('Empresa')->searchable(),
             TextColumn::make('form_type')->label('Tipo de Formulário'),

@@ -14,6 +14,7 @@ class FormResponse extends Model
       'subject_type',
       'respondent_email',
       'respondent_name',
+      'respondent_phone',
       'ip_address',
       'user_agent',
       'submitted_at',

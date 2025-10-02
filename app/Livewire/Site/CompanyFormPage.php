@@ -22,6 +22,7 @@ class CompanyFormPage extends Component
    public $formData = [];
    public $respondent_name = '';
    public $respondent_email = '';
+   public $respondent_phone = '';
    public $submitted = false;
 
    public $isJobVacancy = false;
@@ -227,13 +228,16 @@ class CompanyFormPage extends Component
       // Verificar coleta de dados do template correto
       $collectName = false;
       $collectEmail = false;
+      $collectPhone = false;
 
       if ($this->isJobVacancy) {
          $collectName = $this->form->collect_name ?? false;
          $collectEmail = $this->form->collect_email ?? false;
+         $collectPhone = $this->form->collect_phone ?? false;
       } else {
          $collectName = $this->form->collect_name ?? false;
          $collectEmail = $this->form->collect_email ?? false;
+         $collectPhone = $this->form->collect_phone ?? false;
       }
 
       if ($collectName) {
@@ -244,6 +248,10 @@ class CompanyFormPage extends Component
          $rules['respondent_email'] = 'required|email|max:255';
       }
 
+
+      if ($collectPhone) {
+         $rules['respondent_phone'] = 'required';
+      }
       $fields = $this->getAllFields(); // <<<< MUDANÇA AQUI
 
       foreach ($fields as $field) {
@@ -269,6 +277,10 @@ class CompanyFormPage extends Component
          }
          if ($this->form->collect_email) {
             $rules['respondent_email'] = 'required|email|max:255';
+         }
+
+         if ($this->form->collect_phone) {
+            $rules['respondent_phone'] = 'required';
          }
       }
 
@@ -315,6 +327,7 @@ class CompanyFormPage extends Component
          'respondent_name.required' => 'O nome é obrigatório.',
          'respondent_email.required' => 'O e-mail é obrigatório.',
          'respondent_email.email' => 'O e-mail deve ser um endereço válido.',
+         'respondent_phone.required' => 'O Whatsapp é obrigatório.',
       ];
 
       $fields = $this->getAllFields(); // <<<< MUDANÇA AQUI
@@ -344,6 +357,7 @@ class CompanyFormPage extends Component
             'subject_type' => $this->isJobVacancy ? JobVacancy::class : CompanyForm::class,
             'respondent_name' => $this->form->collect_name ? $this->respondent_name : null,
             'respondent_email' => $this->form->collect_email ? $this->respondent_email : null,
+            'respondent_phone' => $this->form->collect_phone ? $this->respondent_phone : null,
             'ip_address' => Request::ip(),
             'user_agent' => Request::userAgent(),
             'submitted_at' => now(),
@@ -431,6 +445,12 @@ class CompanyFormPage extends Component
          $messages['respondent_email.required'] = 'E-mail é obrigatório.';
          $messages['respondent_email.email'] = 'E-mail deve ser válido.';
          $attributes['respondent_email'] = 'E-mail';
+      }
+
+      if ($this->form->collect_phone || ($this->form->formTemplate && $this->form->formTemplate->collect_phone)) {
+         $rules['respondent_phone'] = 'required';
+         $messages['respondent_phone.required'] = 'Whatsapp é obrigatório.';
+         $attributes['respondent_phone'] = 'Whatsapp';
       }
 
       // Validação dinâmica dos campos personalizados - USAR getAllFields()

@@ -26,7 +26,7 @@
 
          <div class="space-y-6">
             <div @if ($currentStep !== 1) style="display: none;" @endif>
-               @if ($form->collect_name || $form->collect_email)
+               @if ($form->collect_name || $form->collect_email || $form->collect_phone)
 
                   <div class="border-b border-gray-200 pb-6">
                      <h3 class="text-lg font-medium text-gray-900 mb-4">Seus dados</h3>
@@ -63,6 +63,23 @@
                                  " />
                            </div>
                         @endif
+
+                        @if ($form->collect_phone)
+                           <div class="space-y-2">
+                              <label for="respondent_phone"
+                                 class="block text-sm font-medium text-gray-700">Whatsapp
+                              </label>
+                              <x-mary-input type="text" id="respondent_phone" class="input-lg"
+                                 wire:model.defer="respondent_phone"
+                                 x-data
+                                 x-on:input="
+                                    $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+                                    
+                                    let label = $el.closest('label.input');
+                                    if(label) label.classList.remove('!input-error');
+                                 " />
+                           </div>
+                        @endif
                      </div>
                   </div>
                @endif
@@ -90,7 +107,6 @@
          </div>
 
          <div>
-
             <div class="pt-8 flex flex-col md:flex-row justify-between items-center gap-6">
                @if ($currentStep > 1)
                   <x-mary-button
@@ -130,22 +146,81 @@
                <div class="border-b border-gray-200 pb-6">
                   <h3 class="text-lg font-medium text-gray-900 mb-4">Seus dados</h3>
 
-                  <div class="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                  <div class="grid grid-cols-1 gap-4">
                      @if ($form->collect_name)
                         <div class="space-y-2">
                            <label for="respondent_name" class="block text-sm font-medium text-gray-700">Nome
                            </label>
-                           <x-mary-input type="text" id="respondent_name"
-                              wire:model.defer="respondent_name" />
+                           <x-mary-input type="text" id="respondent_name" class="input-lg"
+                              wire:model.defer="respondent_name"
+                              x-data
+                              x-on:input="
+                                    $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+                                    
+                                    let label = $el.closest('label.input');
+                                    if(label) label.classList.remove('!input-error');
+                                 " />
                         </div>
                      @endif
 
                      @if ($form->collect_email)
                         <div class="space-y-2">
-                           <label for="respondent_email" class="block text-sm font-medium text-gray-700">E-mail
+                           <label for="respondent_email"
+                              class="block text-sm font-medium text-gray-700">E-mail
                            </label>
-                           <x-mary-input type="email" id="respondent_email"
-                              wire:model.defer="respondent_email" />
+                           <x-mary-input type="email" id="respondent_email" class="input-lg"
+                              wire:model.defer="respondent_email"
+                              x-data
+                              x-on:input="
+                                    $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+                                    
+                                    let label = $el.closest('label.input');
+                                    if(label) label.classList.remove('!input-error');
+                                 " />
+                        </div>
+                     @endif
+
+                     @if ($form->collect_phone)
+                        <div class="space-y-2">
+                           <label for="respondent_phone"
+                              class="block text-sm font-medium text-gray-700">Whatsapp
+                           </label>
+                           <x-mary-input type="text" id="respondent_phone" class="input-lg"
+                              wire:model.defer="respondent_phone"
+                              x-data="{
+                                  formatPhone(value) {
+                                      if (!value) return '';
+                                      let v = value.replace(/\D/g, '').substring(0, 11);
+                                      if (v.length >= 11) {
+                                          // (99) 99999-9999
+                                          v = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+                                      } else if (v.length >= 10) {
+                                          // (99) 9999-9999
+                                          v = v.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+                                      } else if (v.length >= 6) {
+                                          v = v.replace(/(\d{2})(\d{4})/, '($1) $2');
+                                      } else if (v.length >= 2) {
+                                          v = v.replace(/(\d{2})/, '($1) ');
+                                      }
+                                      return v;
+                                  }
+                              }"
+                              x-init="$nextTick(() => {
+                                  let input = $el.querySelector('input');
+                                  if (input && input.value) {
+                                      input.value = formatPhone(input.value);
+                                  }
+                              })"
+                              x-on:input="
+                                    $el.closest('fieldset').querySelector('.text-error')?.classList.add('hidden');
+                                    
+                                    let label = $el.closest('label.input');
+                                    if(label) label.classList.remove('!input-error');
+
+                                           let v = formatPhone($event.target.value);
+                           $event.target.value = v;
+                           $wire.set('respondent_phone', v);
+                                 " />
                         </div>
                      @endif
                   </div>

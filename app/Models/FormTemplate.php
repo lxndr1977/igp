@@ -16,6 +16,7 @@ class FormTemplate extends Model
       'is_vacancy_form',
       'collect_email',
       'collect_name',
+      'collect_phone',
       'title_success_message',
       'success_message',
       'redirect_url',
@@ -25,6 +26,7 @@ class FormTemplate extends Model
       'is_active' => 'boolean',
       'is_vacancy_form' => 'boolean',
       'collect_email' => 'boolean',
+      'collect_phone' => 'boolean',
       'collect_name' => 'boolean',
    ];
 

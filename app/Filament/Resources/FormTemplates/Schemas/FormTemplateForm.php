@@ -52,22 +52,28 @@ class FormTemplateForm
             Section::make('Configurações de Coleta')
                ->description('Defina quais dados serão coletados')
                ->columnSpanFull()
-               ->columns(3)
+               ->columns(4)
                ->schema([
                   Toggle::make('is_active')
                      ->label('Formulário Ativo')
                      ->default(true)
                      ->helperText('Desative para pausar temporariamente'),
 
+                  Toggle::make('collect_name')
+                     ->label('Coletar Nome')
+                     ->default(true)
+                     ->helperText('Campo obrigatório de nome'),
+
                   Toggle::make('collect_email')
                      ->label('Coletar E-mail')
                      ->default(true)
                      ->helperText('Campo obrigatório de e-mail'),
 
-                  Toggle::make('collect_name')
-                     ->label('Coletar Nome')
+
+                  Toggle::make('collect_phone')
+                     ->label('Coletar Whatsapp')
                      ->default(true)
-                     ->helperText('Campo obrigatório de nome'),
+                     ->helperText('Campo obrigatório de telefone'),
                ]),
 
             Section::make('Pós-Envio')

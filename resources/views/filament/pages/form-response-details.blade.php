@@ -35,7 +35,7 @@
          Enviado por
       </x-slot>
 
-      <dl class="grid gap-4 sm:grid-cols-3">
+      <dl class="grid gap-4 gap-y-6 sm:grid-cols-3">
          <div>
             <dt class="text-xs font-medium text-gray-500">Nome</dt>
             <dd class="mt-1 text-sm text-gray-950">
@@ -51,6 +51,20 @@
                   <a href="mailto:{{ $response->respondent_email }}"
                      class="text-gray-950">
                      {{ $response->respondent_email }}
+                  </a>
+               @else
+                  <span class="text-gray-950">—</span>
+               @endif
+            </dd>
+         </div>
+
+         <div>
+            <dt class="text-xs font-medium text-gray-500">Whatsapp</dt>
+            <dd class="mt-1 text-sm">
+               @if ($response->respondent_phone)
+                  <a href="mailto:{{ $response->respondent_phone }}"
+                     class="text-gray-950">
+                     {{ $response->respondent_phone }}
                   </a>
                @else
                   <span class="text-gray-950">—</span>
