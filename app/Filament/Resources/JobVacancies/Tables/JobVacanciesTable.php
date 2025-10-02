@@ -36,9 +36,16 @@ class JobVacanciesTable
                ->label('Título da vaga')
                ->searchable(),
 
+            TextColumn::make('slug')
+               ->label('URL')
+               ->formatStateUsing(fn($record) => "/{$record->slug}")
+               ->copyable()
+               ->copyableState(fn($record) => url("vagas/{$record->company_id}/{$record->slug}"))
+               ->copyMessage('Copiado')
+               ->searchable(),
+
             TextColumn::make('status')
                ->label('Status')
-
                ->badge(),
 
             TextColumn::make('form_responses_count')

@@ -37,47 +37,47 @@
       @if ($isJob)
          {{-- Seções específicas de vaga --}}
          @if (!empty($entity->description))
-            <div class="bg-white rounded-lg shadow border border-gray-200 p-6">
-               <h3 class="text-xl font-semibold text-gray-900 mb-4">Descrição da Vaga</h3>
-               <div class="text-gray-700  max-w-none leading-relaxed form-content-description">
+            <div class="bg-white rounded-lg shadow border border-neutral-200 p-6">
+               <h3 class="text-xl font-semibold text-neutral-900 mb-4">Descrição da Vaga</h3>
+               <div class="text-neutral-700  max-w-none leading-relaxed form-content-description">
                   {!! $entity->description !!}
                </div>
             </div>
          @endif
 
          @if (!empty($entity->requirements))
-            <div class="bg-white rounded-lg border border-gray-200 p-6">
-               <h3 class="text-xl font-semibold text-gray-900 mb-4">Requisitos</h3>
-               <div class="text-gray-700 prose max-w-none leading-relaxed">
-                  {!! nl2br(e($entity->requirements)) !!}
+            <div class="bg-white rounded-lg border border-neutral-200 p-6">
+               <h3 class="text-xl font-semibold text-neutral-900 mb-4">Requisitos</h3>
+               <div class="text-neutral-700 prose max-w-none leading-relaxed form-content-description">
+                  {!! $entity->requirements !!}
                </div>
             </div>
          @endif
 
          @if (!empty($entity->benefits))
-            <div class="bg-white rounded-lg border border-gray-200 p-6">
-               <h3 class="text-xl font-semibold text-gray-900 mb-4">Benefícios</h3>
-               <div class="text-gray-700 prose max-w-none leading-relaxed">
-                  {!! nl2br(e($entity->benefits)) !!}
+            <div class="bg-white rounded-lg border border-neutral-200 p-6">
+               <h3 class="text-xl font-semibold text-neutral-900 mb-4">Benefícios</h3>
+               <div class="text-neutral-700 prose max-w-none leading-relaxed form-content-description">
+                  {!! $entity->benefits !!}
                </div>
             </div>
          @endif
       @else
          {{-- Seção para formulário --}}
          @if (!empty($entity->description))
-            <div class="bg-white rounded-lg border border-gray-200 p-6">
-               <h3 class="text-xl font-semibold text-gray-900 mb-4">Descrição</h3>
-               <div class="text-gray-700 prose max-w-none leading-relaxed">
-                  {!! nl2br(e($entity->description)) !!}
+            <div class="bg-white rounded-lg border border-neutral-200 p-6">
+               <h3 class="text-xl font-semibold text-neutral-900 mb-4">Descrição</h3>
+               <div class="text-neutral-700 prose max-w-none leading-relaxed form-content-description">
+                  {!! $entity->description !!}
                </div>
             </div>
          @endif
 
          {{-- Adicione outras seções específicas do form se necessário --}}
          @if (!empty($entity->instructions))
-            <div class="bg-white rounded-lg border border-gray-200 p-6">
-               <h3 class="text-xl font-semibold text-gray-900 mb-4">Instruções</h3>
-               <div class="text-gray-700 prose max-w-none leading-relaxed">
+            <div class="bg-white rounded-lg border border-neutral-200 p-6">
+               <h3 class="text-xl font-semibold text-neutral-900 mb-4">Instruções</h3>
+               <div class="text-neutral-700 prose max-w-none leading-relaxed form-content-description">
                   {!! nl2br(e($entity->instructions)) !!}
                </div>
             </div>
