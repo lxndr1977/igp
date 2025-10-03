@@ -74,7 +74,7 @@
               }
   
               this.lastScrollY = currentScrollY;
-          }, { passive: true });
+          });
       },
   
       navigateTo(href) {

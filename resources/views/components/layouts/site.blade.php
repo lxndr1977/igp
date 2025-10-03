@@ -6,11 +6,11 @@
 
    <body class="min-h-screen bg-white">
 
-      {{-- @include('partials.site.header') --}}
+      @include('partials.site.header')
 
       {{ $slot }}
 
-      {{-- @include('partials.site.footer') --}}
+      @include('partials.site.footer')
 
       @livewireScripts
 
@@ -22,8 +22,7 @@
                   top: 0,
                   behavior: 'smooth'
                });
-               console.log('mudou');
-            });
+           });
          </script>
       @endpush
    </body>
