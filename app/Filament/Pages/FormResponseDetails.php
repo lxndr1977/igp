@@ -2,6 +2,7 @@
 
 namespace App\Filament\Pages;
 
+use App\Enums\FormFieldTypeEnum;
 use App\Models\Company;
 use Filament\Pages\Page;
 use App\Models\FormResponse;
@@ -145,20 +146,8 @@ class FormResponseDetails extends Page
       }
    }
 
-   public function getFieldTypeColor(string $fieldType): string
+   public function shouldShowAsBadge( $fieldType): bool
    {
-      return match ($fieldType) {
-         'email' => 'info',
-         'tel' => 'success',
-         'date' => 'warning',
-         'rating', 'scale' => 'danger',
-         'select_multiple', 'checkbox' => 'primary',
-         default => 'gray',
-      };
-   }
-
-   public function shouldShowAsBadge(string $fieldType): bool
-   {
-      return $fieldType === 'select_multiple';
+      return $fieldType === FormFieldTypeEnum::SelectMultiple;
    }
 }
