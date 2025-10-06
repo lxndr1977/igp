@@ -1,29 +1,33 @@
 <!DOCTYPE html>
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}" class="dark">
-   <head>
-      @include('partials.head')
-   </head>
 
-   <body class="min-h-screen bg-white">
+<head>
+   @include('partials.head')
+</head>
 
-      @include('partials.site.header')
+<body class="min-h-screen bg-white">
 
-      {{ $slot }}
+   <x-mary-toast position="toast-top toast-center" />
 
-      @include('partials.site.footer')
+   @include('partials.site.header')
 
-      @livewireScripts
+   {{ $slot }}
 
-      @push('scripts')
-         <script>
-            // Scroll para o topo quando mudar de etapa
-            Livewire.on('stepChanged', () => {
-               window.scrollTo({
-                  top: 0,
-                  behavior: 'smooth'
-               });
-           });
-         </script>
-      @endpush
-   </body>
+   @include('partials.site.footer')
+
+   @livewireScripts
+
+   @push('scripts')
+      <script>
+         // Scroll para o topo quando mudar de etapa
+         Livewire.on('stepChanged', () => {
+            window.scrollTo({
+               top: 0,
+               behavior: 'smooth'
+            });
+         });
+      </script>
+   @endpush
+</body>
+
 </html>

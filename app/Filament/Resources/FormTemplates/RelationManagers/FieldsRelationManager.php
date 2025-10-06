@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\FormTemplates\RelationManagers;
 
+use App\Enums\FormFieldType;
+use App\Enums\FormFieldTypeEnum;
 use BackedEnum;
 use Filament\Tables\Table;
 use Filament\Actions\Action;
@@ -54,20 +56,7 @@ class FieldsRelationManager extends RelationManager
 
                         Select::make('field_type')
                            ->label('Tipo do Campo')
-                           ->options([
-                              'text' => 'Texto',
-                              'textarea' => 'Área de Texto',
-                              'email' => 'E-mail',
-                              'number' => 'Número',
-                              'tel' => 'Telefone',
-                              'select_single' => 'Seleção Única',
-                              'select_multiple' => 'Seleção Múltipla',
-                              'radio' => 'Radio Button',
-                              'checkbox' => 'Checkbox',
-                              'date' => 'Data',
-                              'rating' => 'Avaliação (Estrelas)',
-                              'scale' => 'Escala (1-10)',
-                           ])
+                           ->options(FormFieldTypeEnum::class)
                            ->required()
                            ->live()
                            ->afterStateUpdated(fn(Set $set) => $set('options', null)),
@@ -83,7 +72,7 @@ class FieldsRelationManager extends RelationManager
                         TextInput::make('placeholder')
                            ->label('Placeholder')
                            ->maxLength(255)
-                           ->hidden(fn(Get $get) => in_array($get('field_type'), ['radio', 'checkbox', 'rating', 'scale'])),
+                           ->hidden(fn(Get $get) => in_array($get('field_type'), [FormFieldTypeEnum::Radio, 'checkbox', 'rating', FormFieldTypeEnum::Scale])),
                      ]),
 
                   Textarea::make('help_text')
@@ -113,12 +102,12 @@ class FieldsRelationManager extends RelationManager
                            ->label('Rótulo')
                            ->required(),
                      )
-                     ->visible(fn(Get $get) => in_array($get('field_type'), ['select_single', 'select_multiple', 'radio']))
+                     ->visible(fn(Get $get) => in_array($get('field_type'), [FormFieldTypeEnum::SelectSingle, FormFieldTypeEnum::SelectMultiple, FormFieldTypeEnum::Radio]))
                      ->columnSpanFull()
                      ->minItems(1)
                      ->addActionLabel('Adicionar Opção'),
                ])
-               ->visible(fn(Get $get) => in_array($get('field_type'), ['select_single', 'select_multiple', 'radio'])),
+               ->visible(fn(Get $get) => in_array($get('field_type'), [FormFieldTypeEnum::SelectSingle, FormFieldTypeEnum::SelectMultiple, FormFieldTypeEnum::Radio])),
 
             Section::make('Configurações de Avaliação')
                ->columnSpanFull()
@@ -180,19 +169,76 @@ class FieldsRelationManager extends RelationManager
                      ->label('Mostrar Valores Numéricos')
                      ->default(true),
                ])
-               ->visible(fn(Get $get) => $get('field_type') === 'scale'),
+               ->visible(fn(Get $get) => $get('field_type') === FormFieldTypeEnum::Scale),
 
-            // Section::make('Regras de Validação Extras')
-            //    ->columnSpanFull()
-            //    ->schema([
-            //       // Textarea::make('validation_rules')
-            //       //    ->label('Regras de Validação')
-            //       //    ->placeholder('min:3|max:100|regex:/^[A-Za-z\s]+$/')
-            //       //    ->helperText('Exemplo: min:3|max:100 para texto com mínimo 3 e máximo 100 caracteres')
-            //       //    ->rows(3),
-            //    ])
-            //    ->collapsible()
-            //    ->collapsed(),
+            Section::make('Validações Adicionais')
+               ->columnSpanFull()
+               ->schema([
+                  Grid::make(2)
+                     ->schema([
+                        TextInput::make('field_config.min_length')
+                           ->label('Comprimento Mínimo')
+                           ->numeric()
+                           ->minValue(0)
+                           ->helperText('Número mínimo de caracteres'),
+
+                        TextInput::make('field_config.max_length')
+                           ->label('Comprimento Máximo')
+                           ->numeric()
+                           ->minValue(1)
+                           ->helperText('Número máximo de caracteres'),
+                     ])
+                     ->visible(fn(Get $get) => in_array($get('field_type'), [
+                        FormFieldTypeEnum::Text,
+                        FormFieldTypeEnum::Textarea,
+                        FormFieldTypeEnum::Email,
+                        FormFieldTypeEnum::Tel,
+                     ])),
+
+                  Grid::make(2)
+                     ->schema([
+                        TextInput::make('field_config.min_value')
+                           ->label('Valor Mínimo')
+                           ->numeric()
+                           ->helperText('Valor numérico mínimo permitido'),
+
+                        TextInput::make('field_config.max_value')
+                           ->label('Valor Máximo')
+                           ->numeric()
+                           ->helperText('Valor numérico máximo permitido'),
+                     ])
+                     ->visible(fn(Get $get) => $get('field_type') === FormFieldTypeEnum::Number),
+
+                  Select::make('field_config.validation_pattern')
+                     ->label('Padrão de Validação')
+                     ->options([
+                        'cpf' => 'CPF',
+                        'cnpj' => 'CNPJ',
+                        'cep' => 'CEP',
+                        'phone_br' => 'Telefone Brasileiro',
+                        'custom' => 'Personalizado (Regex)',
+                     ])
+                     ->live()
+                     ->visible(fn(Get $get) => in_array($get('field_type'), [
+                        FormFieldTypeEnum::Text,
+                        FormFieldTypeEnum::Tel,
+                     ])),
+
+                  TextInput::make('field_config.custom_regex')
+                     ->label('Expressão Regular Personalizada')
+                     ->placeholder('/^[A-Za-z\s]+$/')
+                     ->helperText('Apenas para usuários avançados. Ex: /^[A-Za-z\s]+$/ para apenas letras')
+                     ->visible(fn(Get $get) => $get('field_config.validation_pattern') === 'custom'),
+
+                  TextInput::make('field_config.validation_message')
+                     ->label('Mensagem de Erro Personalizada')
+                     ->placeholder('Por favor, insira um valor válido')
+                     ->helperText('Mensagem exibida quando a validação falha')
+                     ->columnSpanFull(),
+               ])
+               ->collapsible()
+               ->collapsed()
+               ->description('Configure validações adicionais para este campo'),
          ]);
    }
 

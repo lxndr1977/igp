@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\Enums\FormFieldTypeEnum;
 
 class FormTemplateField extends Model
 {
@@ -29,28 +30,13 @@ class FormTemplateField extends Model
       'options'          => 'array',
       'validation_rules' => 'array',
       'field_config'     => 'array',
+      'field_type'       => FormFieldTypeEnum::class, 
    ];
 
-   public function section()
+   public function section(): BelongsTo
    {
       return $this->belongsTo(FormTemplateSection::class, 'form_template_section_id', 'id');
    }
-
-   public const FIELD_TYPES = [
-      'text' => 'Texto',
-      'textarea' => 'Área de Texto',
-      'email' => 'E-mail',
-      'number' => 'Número',
-      'tel' => 'Telefone',
-      'select_single' => 'Seleção Única',
-      'select_multiple' => 'Seleção Múltipla',
-      'radio' => 'Radio Button',
-      'checkbox' => 'Checkbox',
-      'date' => 'Data',
-      'rating' => 'Avaliação (Estrelas)',
-      'scale' => 'Escala (1-10)',
-   ];
-
 
    public function formFieldResponses(): HasMany
    {
@@ -69,53 +55,106 @@ class FormTemplateField extends Model
 
    public function hasOptions(): bool
    {
-      return in_array($this->field_type, ['select_single', 'select_multiple', 'radio', 'checkbox']);
+      return in_array($this->field_type->value, [
+         FormFieldTypeEnum::SelectSingle->value,
+         FormFieldTypeEnum::SelectMultiple->value,
+         FormFieldTypeEnum::Radio->value,
+         FormFieldTypeEnum::Checkbox->value,
+      ]);
    }
 
    public function isMultipleSelection(): bool
    {
-      return in_array($this->field_type, ['select_multiple', 'checkbox']);
+      return in_array($this->field_type->value, [
+         FormFieldTypeEnum::SelectMultiple->value,
+         FormFieldTypeEnum::Checkbox->value,
+      ]);
    }
+public function getValidationRules(): array
+{
+    $rules = [];
 
-   public function getValidationRules(): array
-   {
-      $rules = [];
+    if ($this->is_required) {
+        $rules[] = 'required';
+    } else {
+        $rules[] = 'nullable';
+    }
 
-      if ($this->is_required) {
-         $rules[] = 'required';
-      }
+    // Converte para string se for Enum
+    $fieldType = $this->field_type instanceof \BackedEnum 
+        ? $this->field_type->value 
+        : $this->field_type;
 
-      switch ($this->field_type) {
-         case 'email':
+    switch ($fieldType) {
+        case FormFieldTypeEnum::Email->value:
             $rules[] = 'email';
             break;
-         case 'number':
+
+        case FormFieldTypeEnum::Number->value:
             $rules[] = 'numeric';
+            
+            if (isset($this->field_config['min_value'])) {
+                $rules[] = 'min:' . $this->field_config['min_value'];
+            }
+            if (isset($this->field_config['max_value'])) {
+                $rules[] = 'max:' . $this->field_config['max_value'];
+            }
             break;
-         case 'date':
+
+        case FormFieldTypeEnum::Date->value:
             $rules[] = 'date';
             break;
-         case 'tel':
+
+        case FormFieldTypeEnum::Text->value:
+        case FormFieldTypeEnum::Textarea->value:
+        case FormFieldTypeEnum::Tel->value:
             $rules[] = 'string';
+            
+            if (isset($this->field_config['min_length'])) {
+                $rules[] = 'min:' . $this->field_config['min_length'];
+            }
+            if (isset($this->field_config['max_length'])) {
+                $rules[] = 'max:' . $this->field_config['max_length'];
+            }
+
+            if (isset($this->field_config['validation_pattern'])) {
+                $pattern = $this->field_config['validation_pattern'];
+                
+                switch ($pattern) {
+                    case 'cpf':
+                        $rules[] = new \App\Rules\ValidCpf();
+                        break;
+                    case 'cnpj':
+                        $rules[] = new \App\Rules\ValidCnpj();
+                        break;
+                    case 'cep':
+                        $rules[] = 'regex:/^\d{5}-?\d{3}$/';
+                        break;
+                    case 'phone_br':
+                        $rules[] = 'regex:/^\(\d{2}\)\s?\d{4,5}-?\d{4}$/';
+                        break;
+                    case 'custom':
+                        if (isset($this->field_config['custom_regex'])) {
+                            $rules[] = 'regex:' . $this->field_config['custom_regex'];
+                        }
+                        break;
+                }
+            }
             break;
-      }
+    }
 
-      if ($this->validation_rules && is_array($this->validation_rules)) {
-         $rules = array_merge($rules, $this->validation_rules);
-      }
-
-      return $rules;
-   }
+    return $rules;
+}
 
    public function formatValue($value)
    {
       switch ($this->field_type) {
-         case 'select_multiple':
-         case 'checkbox':
+         case FormFieldTypeEnum::SelectMultiple:
+         case FormFieldTypeEnum::Checkbox:
             return is_array($value) ? $value : [$value];
-         case 'rating':
-         case 'scale':
-         case 'number':
+         case FormFieldTypeEnum::Rating:
+         case FormFieldTypeEnum::Scale:
+         case FormFieldTypeEnum::Number:
             return (int) $value;
          default:
             return $value;
@@ -126,15 +165,12 @@ class FormTemplateField extends Model
    {
       return Attribute::make(
          get: function () {
-            // Pega o valor original da coluna 'options'
             $options = $this->options ?? [];
 
-            // Se não for um array ou estiver vazio, retorna um array vazio.
             if (!is_array($options) || empty($options)) {
                return [];
             }
 
-            // Transforma o array simples no formato que o MaryUI precisa.
             return collect($options)->map(function ($optionValue) {
                return [
                   'id'   => $optionValue,
@@ -148,7 +184,9 @@ class FormTemplateField extends Model
    protected function fieldTypeLabel(): Attribute
    {
       return Attribute::make(
-         get: fn() => self::FIELD_TYPES[$this->field_type] ?? 'Desconhecido'
+         get: fn() => $this->field_type?->getLabel() ?? 'Desconhecido'
       );
    }
+
+   
 }
