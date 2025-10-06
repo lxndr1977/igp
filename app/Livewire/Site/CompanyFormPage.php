@@ -10,6 +10,7 @@ use App\Models\CompanyForm;
 use App\Models\FormResponse;
 use App\Models\FormFieldResponse;
 use App\Enums\JobVacancyStatusEnum;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Validation\ValidationException;
@@ -38,7 +39,10 @@ class CompanyFormPage extends Component
    {
       $this->type = $type;
 
-      $this->company = \App\Models\Company::where('id', $companyId)->first();
+      $this->company = Cache::remember("company_{$companyId}", now()->addMinutes(30), function () use ($companyId) {
+         return \App\Models\Company::find($companyId);
+      });
+      
       if (!$this->company) {
          abort(404, 'Empresa não encontrada');
       }
@@ -55,42 +59,43 @@ class CompanyFormPage extends Component
    /**
     * Carrega formulário para vaga de emprego
     */
+
    private function loadJobVacancyForm(string $companyId, string $formSlug)
    {
+      $cacheKey = "job_vacancy_{$companyId}_{$formSlug}";
 
-      $this->jobVacancy = JobVacancy::where('company_id', $companyId)
-         ->where('slug', $formSlug)
-         ->where('status', JobVacancyStatusEnum::Active)
-         ->with([
-            'company',
-            'formTemplate'
-         ])
-         ->first();
+      $this->jobVacancy = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($companyId, $formSlug) {
+         return JobVacancy::where('company_id', $companyId)
+            ->where('slug', $formSlug)
+            ->where('status', JobVacancyStatusEnum::Active)
+            ->with(['company', 'formTemplate'])
+            ->first();
+      });
 
       if (!$this->jobVacancy || !$this->jobVacancy->formTemplate) {
          abort(404, 'Vaga não encontrada ou sem formulário de candidatura');
       }
 
       $this->form = $this->jobVacancy->formTemplate;
-
       $this->isJobVacancy = true;
    }
+
 
    /**
     * Carrega formulário regular
     */
    private function loadRegularForm(string $companyId, string $formSlug)
    {
-      $this->form = \App\Models\CompanyForm::withCompanyForm()
-         ->with([
-            'company',
-            'formTemplate',
-            'formTemplate.fields'
-         ])
-         ->where('company_id', $companyId)
-         ->where('slug', $formSlug)
-         ->active()
-         ->first();
+      $cacheKey = "company_form_{$companyId}_{$formSlug}";
+
+      $this->form = Cache::remember($cacheKey, now()->addMinutes(10), function () use ($companyId, $formSlug) {
+         return \App\Models\CompanyForm::withCompanyForm()
+            ->with(['company', 'formTemplate', 'formTemplate.fields'])
+            ->where('company_id', $companyId)
+            ->where('slug', $formSlug)
+            ->active()
+            ->first();
+      });
 
       if (!$this->form) {
          abort(404, 'Formulário não encontrado');
@@ -98,6 +103,7 @@ class CompanyFormPage extends Component
 
       $this->isJobVacancy = false;
    }
+
 
    /**
     * Inicializa os dados do formulário
@@ -189,57 +195,57 @@ class CompanyFormPage extends Component
    /**
     * Navega para a etapa anterior no formulário.
     */
-  public function previousStep()
-{
-    if ($this->currentStep > 1) {
-        $this->currentStep--;
-        $this->dispatch('stepChanged');
-    } elseif ($this->currentStep === 1) {
-        $this->backToIntro();
-    }
-}
+   public function previousStep()
+   {
+      if ($this->currentStep > 1) {
+         $this->currentStep--;
+         $this->dispatch('stepChanged');
+      } elseif ($this->currentStep === 1) {
+         $this->backToIntro();
+      }
+   }
 
    /**
     * Valida a etapa atual e avança para a próxima.
     */
    public function nextStep()
-{
-    // Pega as regras da etapa atual
-    $rules = $this->getRulesForCurrentStep();
+   {
+      // Pega as regras da etapa atual
+      $rules = $this->getRulesForCurrentStep();
 
-    // Valida apenas se houver regras
-    if (!empty($rules)) {
-        try {
+      // Valida apenas se houver regras
+      if (!empty($rules)) {
+         try {
             $this->validate($rules, $this->getMessages());
-        } catch (ValidationException $e) {
+         } catch (ValidationException $e) {
             // Pega o primeiro erro para mostrar no toast
             $firstError = collect($e->errors())->flatten()->first();
-            
+
             $this->toast(
-                type: 'error',
-                title: 'Erro de validação',
-                description:"Preencha corretamente os campos do formulário",
-                position: 'toast-top toast-center',
-                icon: 'o-exclamation-triangle',
-                css: 'alert-error',
-                timeout: 5000
+               type: 'error',
+               title: 'Erro de validação',
+               description: "Preencha corretamente os campos do formulário",
+               position: 'toast-top toast-center',
+               icon: 'o-exclamation-triangle',
+               css: 'alert-error',
+               timeout: 5000
             );
-            
+
             throw $e; // Re-lança a exceção para manter os erros nos campos
-        }
-    }
+         }
+      }
 
-    // Avança para a próxima etapa, mesmo que não haja regras
-    if ($this->currentStep < $this->form->sections->count()) {
-        $this->currentStep++;
-    } else {
-        // Última etapa atingida - chama submit
-        $this->submit();
-        return;
-    }
+      // Avança para a próxima etapa, mesmo que não haja regras
+      if ($this->currentStep < $this->form->sections->count()) {
+         $this->currentStep++;
+      } else {
+         // Última etapa atingida - chama submit
+         $this->submit();
+         return;
+      }
 
-    $this->dispatch('stepChanged');
-}
+      $this->dispatch('stepChanged');
+   }
 
 
    public function rules()
@@ -411,10 +417,10 @@ class CompanyFormPage extends Component
          }
 
          $this->clearRateLimit();
-        $this->submitted = true;
+         $this->submitted = true;
 
-        // Toast de sucesso
-        $this->toast(
+         // Toast de sucesso
+         $this->toast(
             type: 'success',
             title: 'Enviado com sucesso!',
             description: 'Seu formulário foi enviado com sucesso.',
@@ -422,18 +428,18 @@ class CompanyFormPage extends Component
             icon: 'o-check-circle',
             css: 'alert-success',
             timeout: 3000
-        );
+         );
 
-        $redirectUrl = $this->getFormTemplate()->redirect_url ?? null;
+         $redirectUrl = $this->getFormTemplate()->redirect_url ?? null;
 
-        if ($redirectUrl) {
+         if ($redirectUrl) {
             return redirect($redirectUrl);
-        }
-    } catch (ValidationException $e) {
-        // Já tratado no validateForm()
-        throw $e;
-    } catch (Exception $e) {
-        $this->toast(
+         }
+      } catch (ValidationException $e) {
+         // Já tratado no validateForm()
+         throw $e;
+      } catch (Exception $e) {
+         $this->toast(
             type: 'error',
             title: 'Erro ao enviar',
             description: $e->getMessage(),
@@ -441,96 +447,96 @@ class CompanyFormPage extends Component
             icon: 'o-x-circle',
             css: 'alert-error',
             timeout: 5000
-        );
-        
-        session()->flash('error', $e->getMessage());
-    }
-}
+         );
+
+         session()->flash('error', $e->getMessage());
+      }
+   }
 
 
-  private function validateForm()
-{
-    $rules = [];
-    $messages = [];
-    $attributes = [];
+   private function validateForm()
+   {
+      $rules = [];
+      $messages = [];
+      $attributes = [];
 
-    // Validação dos campos básicos
-    if ($this->shouldCollect('name')) {
-        $rules['respondent_name'] = 'required|string|max:255';
-        $messages['respondent_name.required'] = 'Nome é obrigatório.';
-        $attributes['respondent_name'] = 'Nome';
-    }
+      // Validação dos campos básicos
+      if ($this->shouldCollect('name')) {
+         $rules['respondent_name'] = 'required|string|max:255';
+         $messages['respondent_name.required'] = 'Nome é obrigatório.';
+         $attributes['respondent_name'] = 'Nome';
+      }
 
-    if ($this->shouldCollect('email')) {
-        $rules['respondent_email'] = 'required|email';
-        $messages['respondent_email.required'] = 'E-mail é obrigatório.';
-        $messages['respondent_email.email'] = 'E-mail deve ser válido.';
-        $attributes['respondent_email'] = 'E-mail';
-    }
+      if ($this->shouldCollect('email')) {
+         $rules['respondent_email'] = 'required|email';
+         $messages['respondent_email.required'] = 'E-mail é obrigatório.';
+         $messages['respondent_email.email'] = 'E-mail deve ser válido.';
+         $attributes['respondent_email'] = 'E-mail';
+      }
 
-    if ($this->shouldCollect('phone')) {
-        $rules['respondent_phone'] = 'required';
-        $messages['respondent_phone.required'] = 'Whatsapp é obrigatório.';
-        $attributes['respondent_phone'] = 'Whatsapp';
-    }
+      if ($this->shouldCollect('phone')) {
+         $rules['respondent_phone'] = 'required';
+         $messages['respondent_phone.required'] = 'Whatsapp é obrigatório.';
+         $attributes['respondent_phone'] = 'Whatsapp';
+      }
 
-    // Validação dinâmica dos campos personalizados
-    $fields = $this->getAllFields();
+      // Validação dinâmica dos campos personalizados
+      $fields = $this->getAllFields();
 
-    foreach ($fields as $field) {
-        $fieldRules = $field->getValidationRules();
+      foreach ($fields as $field) {
+         $fieldRules = $field->getValidationRules();
 
-        if (!empty($fieldRules)) {
+         if (!empty($fieldRules)) {
             $fieldKey = 'formData.' . $field->id;
             $rules[$fieldKey] = $fieldRules;
 
             foreach ($fieldRules as $rule) {
-                // Tratamento especial para ValidationRule objects
-                if (is_object($rule)) {
-                    continue;
-                }
-                
-                $ruleName = explode(':', $rule)[0];
-                $messageKey = $fieldKey . '.' . $ruleName;
+               // Tratamento especial para ValidationRule objects
+               if (is_object($rule)) {
+                  continue;
+               }
 
-                $messages[$messageKey] = match ($ruleName) {
-                    'required' => $field->label . ' é obrigatório.',
-                    'email' => $field->label . ' deve ser um e-mail válido.',
-                    'numeric' => $field->label . ' deve ser um número.',
-                    'date' => $field->label . ' deve ser uma data válida.',
-                    'min' => $field->label . ' não atende ao tamanho mínimo.',
-                    'max' => $field->label . ' excede o tamanho máximo.',
-                    'regex' => $field->label . ' está em formato inválido.',
-                    default => null
-                };
+               $ruleName = explode(':', $rule)[0];
+               $messageKey = $fieldKey . '.' . $ruleName;
+
+               $messages[$messageKey] = match ($ruleName) {
+                  'required' => $field->label . ' é obrigatório.',
+                  'email' => $field->label . ' deve ser um e-mail válido.',
+                  'numeric' => $field->label . ' deve ser um número.',
+                  'date' => $field->label . ' deve ser uma data válida.',
+                  'min' => $field->label . ' não atende ao tamanho mínimo.',
+                  'max' => $field->label . ' excede o tamanho máximo.',
+                  'regex' => $field->label . ' está em formato inválido.',
+                  default => null
+               };
             }
 
             $attributes[$fieldKey] = $field->label;
-        }
-    }
+         }
+      }
 
-    if (!empty($rules)) {
-        try {
+      if (!empty($rules)) {
+         try {
             $this->validate($rules, $messages, $attributes);
-        } catch (ValidationException $e) {
+         } catch (ValidationException $e) {
             // Pega o primeiro erro para mostrar no toast
             dd();
             $this->toast(
-                type: 'error',
-                title: 'Erro de validação',
-                description: "Preencha corretamente os campos do formulário",
-                position: 'toast-top toast-center',
-                icon: 'o-exclamation-triangle',
-                css: 'alert-error',
-                timeout: 5000
+               type: 'error',
+               title: 'Erro de validação',
+               description: "Preencha corretamente os campos do formulário",
+               position: 'toast-top toast-center',
+               icon: 'o-exclamation-triangle',
+               css: 'alert-error',
+               timeout: 5000
             );
-            
-            throw $e; // Re-lança a exceção para manter os erros nos campos
-        }
-    }
 
-    if ($this->emailAlreadyUsed()) {
-        $this->toast(
+            throw $e; // Re-lança a exceção para manter os erros nos campos
+         }
+      }
+
+      if ($this->emailAlreadyUsed()) {
+         $this->toast(
             type: 'error',
             title: 'E-mail já utilizado',
             description: 'Este e-mail já foi usado para enviar este formulário.',
@@ -538,13 +544,13 @@ class CompanyFormPage extends Component
             icon: 'o-exclamation-triangle',
             css: 'alert-error',
             timeout: 5000
-        );
-        
-        throw ValidationException::withMessages([
+         );
+
+         throw ValidationException::withMessages([
             'respondent_email' => 'Este e-mail já foi usado para enviar este formulário. Cada e-mail pode enviar apenas uma vez.'
-        ]);
-    }
-}
+         ]);
+      }
+   }
    public function getScaleOptions($minValue, $maxValue)
    {
       return collect(range($minValue, $maxValue))
