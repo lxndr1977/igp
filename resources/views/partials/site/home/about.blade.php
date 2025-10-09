@@ -15,8 +15,7 @@
              <p class="mb-6 text-neutral-500">Diretora e Fundadora</p>
 
              <p class="text-base md:text-lg leading-relaxed mb-6 text-neutral-900">Com uma trajetória sólida de 18 anos
-                no mercado de gestão de
-                pessoas, Rochelle Machado lidera a InRoche
+                no mercado de gestão de pessoas, Rochele Machado lidera a InRoche
                 com foco na inovação e transformação organizacional. Sua experiência abrange desde recrutamento
                 estratégico até o desenvolvimento de lideranças de alta performance.</p>
 
@@ -27,7 +26,7 @@
           </div> 
 
           <div class="order-1 md:order-2">
-             <img src="{{ asset('images/hero4.webp') }}"
+             <img src="{{ asset('images/hero3.webp') }}"
                 alt="Foto Rochelle Machado"
                 loading="lazy"
                 class="rounded-lg max-w-md w-full mx-auto">

@@ -27,7 +27,10 @@
                </h2>
 
                <p class="text-lg md:text-xl text-neutral-900 leading-relaxed text-balance mb-12">
-                  A InRoche é especialista na <strong>implementação da NR-1</strong>, oferecendo soluções completas para o <strong>gerenciamento de riscos ocupacionais</strong>, incluindo a identificação e prevenção de fatores psicossociais. Atuamos desde o diagnóstico inicial até a capacitação das equipes, garantindo conformidade legal, segurança dos colaboradores e aumento da produtividade.
+                  A InRoche é especialista na <strong>implementação da NR-1</strong>, oferecendo soluções completas para
+                  o <strong>gerenciamento de riscos ocupacionais</strong>, incluindo a identificação e prevenção de
+                  fatores psicossociais. Atuamos desde o diagnóstico inicial até a capacitação das equipes, garantindo
+                  conformidade legal, segurança dos colaboradores e aumento da produtividade.
                </p>
 
                <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -38,6 +41,33 @@
                </div>
             </div>
          </div>
+      </div>
+
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-20 lg:pt-24">
+         <p class="text-xl md:text-2xl mb-6 font-medium text-secondary-600 text-balance">
+            A NR 1 estabelece as diretrizes fundamentais de segurança e saúde no trabalho, sendo obrigatória para todas
+            as empresas que buscam atender à legislação trabalhista.
+         </p>
+
+         <p class="text-lg text-base leading-relaxed mb-6">
+            Ela define responsabilidades, direitos e deveres, além de orientar a implementação do Gerenciamento de
+            Riscos Ocupacionais (GRO) e do Programa de Gerenciamento de Riscos (PGR).
+         </p>
+
+         <p class="text-lg text-base leading-relaxed mb-6">
+            Cumprir a NR 1 não é apenas atender à lei, mas também investir em prevenção, reduzindo acidentes,
+            afastamentos e custos para a organização.
+         </p>
+
+         <p class="text-lg text-base leading-relaxed mb-6">
+            Com profissionais especializados, é possível aplicar o mapeamento de riscos psicossociais, treinamentos e
+            medidas de prevenção que tornam o ambiente de trabalho mais seguro e saudável.
+         </p>
+
+         <p class="text-lg text-base leading-relaxed mb-6">
+            Na InRoche, oferecemos suporte completo em consultoria e treinamentos de NR 1, garantindo conformidade legal
+            e valorizando o bem-estar das pessoas. 
+         </p>
       </div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-20 lg:pt-24">
@@ -131,7 +161,8 @@
                         </div>
                         <h4 class="text-xl font-semibold text-neutral-900 mb-2">Excelência em Compliance</h4>
                         <p class="text-neutral-600 md:text-lg">
-                           Garanta a conformidade da sua empresa com a NR-1, reduza riscos legais e promova um ambiente de trabalho mais saudável e produtivo para todos.
+                           Garanta a conformidade da sua empresa com a NR-1, reduza riscos legais e promova um ambiente
+                           de trabalho mais saudável e produtivo para todos.
                         </p>
                      </div>
                   </div>

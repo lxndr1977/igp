@@ -23,13 +23,12 @@
             <div class="max-w-5xl mx-auto text-center">
                <h2
                   class="text-2xl md:text-3xl lg:text-5xl font-medium text-secondary-600 text-balance tracking-tight leading-[1.1] mb-6">
-                  Impulsione a performance da sua empresa com programas de
-                  treinamento corporativo sob medida
+                  Investir em pessoas é garantir o futuro da empresa.
                </h2>
 
                <p class="text-lg md:text-xl text-neutral-900 leading-relaxed text-balance  mb-12   ">
-                  Na InRoche, acreditamos que investir no desenvolvimento de pessoas é o caminho mais eficaz para
-                  alcançar resultados consistentes e sustentáveis.
+                  O treinamento fortalece competências e prepara equipes para novos desafios. Na InRoche, acreditamos
+                  que desenvolver pessoas é desenvolver empresas.
                </p>
 
                <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -42,6 +41,23 @@
          </div>
       </div>
 
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-20 lg:pt-24">
+         <p class="text-xl md:text-2xl mb-6 font-medium text-secondary-600 text-balance">
+            Com programas personalizados, alinhamos o desenvolvimento humano às metas organizacionais, promovendo
+            crescimento e resultados consistentes.
+         </p>
+
+         <p class="text-lg text-base leading-relaxed mb-6">
+            Os treinamentos aumentam a motivação, o engajamento e tornam o ambiente de trabalho mais saudável e
+            colaborativo.
+         </p>
+
+         <p class="text-lg text-base leading-relaxed mb-6">
+            Empresas que capacitam continuamente suas equipes têm maior capacidade de adaptação, inovação e
+            competitividade.
+         </p>
+      </div>
+
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-20 lg:pt-24">
 
          <!-- Cards de Benefícios -->
@@ -52,7 +68,7 @@
                   <x-tabler-bulb />
                </div>
                <h3 class="text-xl font-semibold text-neutral-900 mb-4">Inovação e engajamento</h3>
-               <p class="text-neutral-600">
+               <p class="text-neutral-900">
                   Programas personalizados que combinam metodologias modernas para máximo engajamento e retenção do
                   aprendizado.
                </p>
@@ -64,7 +80,7 @@
                   <x-tabler-tools />
                </div>
                <h3 class="text-xl font-semibold text-neutral-900 mb-4">Competências técnicas</h3>
-               <p class="text-neutral-600">
+               <p class="text-neutral-900">
                   Fortalecimento de habilidades técnicas e comportamentais essenciais para o crescimento profissional.
                </p>
             </div>
@@ -75,7 +91,7 @@
                   <x-tabler-rocket />
                </div>
                <h3 class="text-xl font-semibold text-neutral-900 mb-4">Preparação para o futuro</h3>
-               <p class="text-neutral-600">
+               <p class="text-neutral-900">
                   Equipes preparadas para os desafios futuros com foco em liderança, comunicação e produtividade.
                </p>
             </div>
@@ -85,7 +101,8 @@
          <div class="p-8 md:p-12">
             <div class="grid lg:grid-cols-2 gap-12 items-center">
                <div>
-                  <h3 class="mb-6 text-2xl md:text-3xl lg:text-4xl font-medium text-neutral-900 text-balance tracking-tight leading-[1.2]">
+                  <h3
+                     class="mb-6 text-2xl md:text-3xl lg:text-4xl font-medium text-neutral-900 text-balance tracking-tight leading-[1.2]">
                      Programas estruturados para
                      resultados reais
                   </h3>
@@ -133,7 +150,7 @@
                            <x-tabler-trending-up class="w-10 h-10 text-secondary-600" />
                         </div>
                         <h4 class="text-xl font-semibold text-neutral-900 mb-2">Resultados Comprovados</h4>
-                        <p class="text-neutral-600 md:text-lg">
+                        <p class="text-neutral-900 md:text-lg">
                            Transforme sua empresa em um ambiente de alta performance com equipes mais motivadas,
                            preparadas e orientadas para resultados.
                         </p>

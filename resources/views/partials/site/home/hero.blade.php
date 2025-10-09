@@ -19,9 +19,8 @@
                Oferecemos soluções inovadoras em gestão de pessoas para organizações e apoiamos profissionais no
                crescimento de suas carreiras.
             </p>
-
-            <div class="flex flex-row gap-6">
-
+            
+            <div class="flex flex-col md:flex-row gap-6">
                <a href="https://web.whatsapp.com/send?phone=5554996831871" class="btn btn-primary w-auto btn-lg py-4 px-8 flex items-center gap-2">
                   <x-tabler-brand-whatsapp class="w-5 h-5" />
                   <span >Fale conosco</span>

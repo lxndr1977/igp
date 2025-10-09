@@ -45,7 +45,7 @@
             'icon' => 'tabler-shield-check',
             'title' => 'NR-1 para Empresas',
             'route' => route('site.services.consulting'),
-            'description' => 'Adequação inteligente à norma, protegendo sua equipe, reduzindo riscos e impulsionando resultados sustentáveis',
+            'description' => 'A NR 1 é a porta de entrada para a segurança e saúde no trabalho: obrigatória por lei e essencial para proteger vidas e fortalecer resultados',
         ],
     ];
     
@@ -94,11 +94,11 @@
             @if($highlightFirst && count($servicesList) > 0)
                 @php $firstService = $servicesList[0]; @endphp
                 <div class="bg-white {{ $backgroundColor === 'bg-white' ? 'border border-neutral-200' : '' }} text-secondary-600 p-10 md:p-12 rounded-xl hover:shadow-lg hover:-translate-y-1 transition duration-300 mb-8">
-                    <div class="flex flex-col  items-center justify-center gap-8">
-                        <div class="w-16 h-16 mx-auto bg-neutral-100 rounded-xl flex items-center justify-center flex-shrink-0">
-                            <x-dynamic-component :component="$firstService['icon']" class="w-9 h-9 text-secondary-600" />
+                    <div class="flex flex-col  md:items-center md:justify-center gap-8">
+                        <div class="w-12 md:w-16 w-12 md:h-16 mx-0 md:mx-auto bg-neutral-100 rounded-xl flex items-center justify-center flex-shrink-0">
+                            <x-dynamic-component :component="$firstService['icon']" class="w-7 md:w-9 h7 md:h-9 text-secondary-600" />
                         </div>
-                        <div class="flex-1 text-center">
+                        <div class="flex-1 text-start md:text-center">
                             <h3 class="text-lg md:text-3xl font-bold mb-3 text-neutral-800">{{ $firstService['title'] }}</h3>
                             <p class="text-lg md:text-xl mb-6 text-neutral-900 leading-relaxed">{{ $firstService['description'] }}</p>
                             <x-mary-button 

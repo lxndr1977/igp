@@ -23,13 +23,14 @@
             <div class="max-w-5xl mx-auto text-center">
                <h2
                   class="text-2xl md:text-3xl lg:text-5xl font-medium text-secondary-600 text-balance tracking-tight leading-[1.1] mb-6">
-                  Inspire, motive e transforme sua equipe com palestras de alto impacto
+                  As palestras são uma oportunidade de levar conhecimento, motivação e reflexão de forma prática e
+                  dinâmica aos colaboradores.
                </h2>
 
                <p class="text-lg md:text-xl text-neutral-900 leading-relaxed text-balance mb-12">
-                  Na InRoche, desenvolvemos <strong>palestras corporativas personalizadas</strong> que unem conteúdo
-                  técnico, motivacional e estratégico, sempre alinhado aos objetivos do seu negócio. Uma experiência
-                  única de aprendizado, inspiração e crescimento para transformar resultados.
+                  Com uma linguagem acessível e envolvente, promovemos momentos que inspiram mudanças de atitude e
+                  fortalecem a cultura organizacional.
+
                </p>
 
                <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -40,6 +41,23 @@
                </div>
             </div>
          </div>
+      </div>
+
+      <div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-20 lg:pt-24">
+         <p class="text-xl md:text-2xl mb-6 font-medium text-secondary-600 text-balance">
+            Cada tema é cuidadosamente preparado para atender às necessidades da empresa, unindo conteúdo técnico com
+            vivências reais e aplicáveis.
+         </p>
+
+         <p class="text-lg text-base leading-relaxed mb-6">
+            Além de informar, nossas palestras despertam o engajamento das equipes e contribuem para um ambiente de
+            trabalho mais saudável e produtivo.
+         </p>
+
+         <p class="text-lg text-base leading-relaxed mb-6">
+            Na InRoche, acreditamos que compartilhar conhecimento é transformar pessoas. Por isso, nossas palestras são
+            pensadas para gerar impacto, aprendizado e resultados.
+         </p>
       </div>
 
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-20 lg:pt-24">
@@ -75,7 +93,8 @@
                </div>
                <h3 class="text-xl font-semibold text-neutral-900 mb-4">Impacto estratégico</h3>
                <p class="text-neutral-600">
-                  Palestras alinhadas às metas organizacionais para potencializar resultados e impulsionar a cultura de inovação.
+                  Palestras alinhadas às metas organizacionais para potencializar resultados e impulsionar a cultura de
+                  inovação.
                </p>
             </div>
          </div>
@@ -133,7 +152,8 @@
                         </div>
                         <h4 class="text-xl font-semibold text-neutral-900 mb-2">Resultados Reais</h4>
                         <p class="text-neutral-600 md:text-lg">
-                           Inspire sua equipe, gere engajamento e alcance novos patamares de performance e inovação por meio de nossas palestras corporativas.
+                           Inspire sua equipe, gere engajamento e alcance novos patamares de performance e inovação por
+                           meio de nossas palestras corporativas.
                         </p>
                      </div>
                   </div>

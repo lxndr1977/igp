@@ -20,7 +20,7 @@
                 organizacional e formação de talentos estratégicos — ajudando empresas a alinhar resultados de negócio
                 com o crescimento humano.
              </p>
-             <p class="text-sm leading-relaxed mb-12">Rochelle Machado | Diretora</p>
+             <p class="text-sm leading-relaxed mb-12">Rochele Machado | Diretora</p>
 
              <x-mary-button link="#contato"
                 icon="tabler.brand-whatsapp"
