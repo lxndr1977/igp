@@ -22,7 +22,7 @@
             'route' => route('site.services.recruitment'),
             'description' => 'Processo de Recrutamento e Seleção estruturado, estratégico e humanizado, visando atrair talentos alinhados à cultura organizacional',
             'featured' => true,
-        ],
+        ], 
         [
             'icon' => 'tabler-chalkboard-teacher',
             'title' => 'Treinamentos e Desenvolvimentos',
