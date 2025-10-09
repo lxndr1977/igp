@@ -18,7 +18,7 @@
     $defaultServices = [
         [
             'icon' => 'tabler-users',
-            'title' => 'Recrutamento Estratégico',
+            'title' => 'Recrutamento Estratégico', 
             'route' => route('site.services.recruitment'),
             'description' => 'Processo de Recrutamento e Seleção estruturado, estratégico e humanizado, visando atrair talentos alinhados à cultura organizacional',
             'featured' => true,
@@ -26,7 +26,7 @@
         [
             'icon' => 'tabler-chalkboard-teacher',
             'title' => 'Treinamentos e Desenvolvimentos',
-            'route' => route('site.services.consulting'),
+            'route' => route('site.services.trainings'),
             'description' => 'Programas estruturados para aprimorar competências, fortalecer habilidades e elevar a performance organizacional',
         ],
         [
@@ -38,13 +38,13 @@
         [
             'icon' => 'tabler-presentation',
             'title' => 'Palestras',
-            'route' => route('site.services.consulting'),
+            'route' => route('site.services.talks'),
             'description' => 'Conteúdos técnicos e motivacionais, alinhados às necessidades estratégicas da sua empresa, para inspirar e transformar resultados',
         ],
         [
             'icon' => 'tabler-shield-check',
             'title' => 'NR-1 para Empresas',
-            'route' => route('site.services.consulting'),
+            'route' => route('site.services.nr-1'),
             'description' => 'A NR 1 é a porta de entrada para a segurança e saúde no trabalho: obrigatória por lei e essencial para proteger vidas e fortalecer resultados',
         ],
     ];
