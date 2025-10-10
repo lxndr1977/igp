@@ -69,7 +69,7 @@ class CompanyFormPage extends Component
             ->where('slug', $formSlug)
             ->where('status', JobVacancyStatusEnum::Active)
             ->with(['company', 'formTemplate'])
-            ->get();
+            ->first();
       });
 
       if (!$this->jobVacancy || !$this->jobVacancy->formTemplate) {
