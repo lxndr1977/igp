@@ -15,6 +15,10 @@
 
    @include('partials.site.footer')
 
+   <x-whatsapp-button />
+
+   <x-privacy-policy-modal />
+
    @livewireScripts
 
    @push('scripts')
