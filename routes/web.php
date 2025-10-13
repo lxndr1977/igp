@@ -61,6 +61,6 @@ Route::prefix('treinamentos')->name('site.trainings')->group(function () {
 
 Route::get('/vagas', JobVacancy::class)->name('site.job-vacancies');
 Route::view('/contato', 'site.pages.contact')->name('site.contact');
-Route::view('/politica-de-privacidade', 'site.pages.contact')->name('site.privacy-policy');
+Route::view('/politica-de-privacidade', 'site.pages.privacy-policy')->name('site.privacy-policy');
 
 require __DIR__ . '/auth.php';
