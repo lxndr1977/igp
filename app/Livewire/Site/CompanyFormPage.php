@@ -520,7 +520,6 @@ class CompanyFormPage extends Component
             $this->validate($rules, $messages, $attributes);
          } catch (ValidationException $e) {
             // Pega o primeiro erro para mostrar no toast
-            dd();
             $this->toast(
                type: 'error',
                title: 'Erro de validação',
