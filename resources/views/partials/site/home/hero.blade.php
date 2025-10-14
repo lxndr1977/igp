@@ -34,7 +34,7 @@
 
          <!-- Imagem -->
          <div class="w-full md:w-[50%] flex justify-center md:justify-end">
-            <img src="{{ asset('images/hero-inroche.webp') }}"
+            <img src="{{ asset('images/hero-inroche-3.webp') }}"
                alt="Hero"
                class="w-full object-contain rounded-xl">
          </div>
